@@ -1,0 +1,251 @@
+/* style.css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+    color: #e0e0e0;
+    height: 100%;
+    overflow-x: hidden;
+    scroll-snap-type: y proximity; /* Alterado para proximity */
+    scroll-behavior: smooth;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Header ocupa a tela toda inicialmente */
+    padding: 40px;
+    background-color: #1f1f1f;
+    color: #00ff7f;
+    font-size: 2rem;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 1;
+    scroll-snap-align: start; /* Header também é um ponto de snap */
+    position: relative;
+}
+
+#menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    cursor: pointer;
+}
+
+#menu-toggle img {
+    width: 32px;
+    height: 32px;
+}
+
+
+#menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(70, 70, 70, 0.98);
+    clip-path: circle(0% at 0% 0%);
+    transition: clip-path 0.7s ease-in-out;
+    z-index: 1049;
+    pointer-events: none;
+}
+
+#menu-overlay.active {
+    clip-path: circle(150% at 0% 0%);
+    pointer-events: auto;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1050;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    scroll-snap-align: none;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#sidebar.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.menu-links li {
+    margin: 20px 0;
+}
+
+.menu-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 24px;
+    display: block;
+    transition: color 0.3s;
+}
+
+.menu-links a:hover {
+    color: #00ff7f;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.social-icons a img {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s;
+}
+
+.social-icons a:hover img {
+    transform: scale(1.2);
+}
+
+main {
+    position: relative;
+    z-index: 1;
+}
+
+/* Seções com snap ativo */
+section {
+    height: 100vh;
+    width: 100%;
+    padding: 60px 20px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-snap-align: start;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+}
+
+section h2 {
+    color: #00ff7f;
+    text-align: left;
+    position: relative;
+}
+
+section p {
+    color: #cccccc;
+    text-align: left;
+    position: relative;
+}
+
+/* Indicador visual de scroll */
+.scroll-down-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    animation: bounce 0.7s infinite;
+  }
+  
+  .scroll-icon {
+    width: 30px;
+    height: 30px;
+    fill: #00ff7f;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(8px);
+    }
+  }
+  
+/* Adicione estas regras no final do seu CSS */
+
+.sobre-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.sobre-titulo {
+    color: #00ff7f;
+    text-align: left;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    border-left: 4px solid #00ff7f;
+    padding-left: 15px;
+}
+
+.sobre-texto {
+    color: #cccccc;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: left;
+    min-height: 150px;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: rgba(31, 31, 31, 0.5);
+}
+
+/* Ícone estilo hambúrguer com animação para X */
+.menu-icon {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .menu-icon span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+  }
+  
+  /* Estilo quando o menu está aberto */
+  #menu-toggle.active .menu-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  #menu-toggle.active .menu-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  #menu-toggle.active .menu-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
