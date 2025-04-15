@@ -85,6 +85,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let isScrolling = false;
     const scrollDelay = 800;
 
+    // Intersection Observer - seção Competências
+    const competenciasSection = document.querySelector('#competencias');
+    const observerCompetencias = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                new Typed('#typed-competencias', {
+                    strings: [`
+    HTML       CSS        JavaScript     Python      SQL
+    Git/GitHub Linux      Flask          Bootstrap   Scrum
+                `],
+                    typeSpeed: 20,
+                    backSpeed: 10,
+                    showCursor: true,
+                    cursorChar: '|',
+                    loop: false,
+                    contentType: 'html'
+                });
+
+                observerCompetencias.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+
+    if (competenciasSection) {
+        observerCompetencias.observe(competenciasSection);
+    }
+
+
     document.addEventListener('wheel', (e) => {
         if (menuOpen || isScrolling) return;
 
@@ -164,5 +194,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Botão scroll down
-
+    
 });

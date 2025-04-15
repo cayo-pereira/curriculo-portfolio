@@ -186,8 +186,6 @@ section p {
     }
   }
   
-/* Adicione estas regras no final do seu CSS */
-
 .sobre-container {
     max-width: 800px;
     margin: 0 auto;
@@ -249,3 +247,44 @@ section p {
     transform: rotate(-45deg) translate(5px, -5px);
   }
   
+  .competencias-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    width: 100%
+}
+
+/* Estilo para o efeito de digitação no grid */
+#typed-grid {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;  /* Ajuste para o tamanho de fonte padrão */
+    color: #00ff7f;
+    max-width: 100%;  /* Garante que o texto se ajuste à largura da tela */
+    overflow-wrap: break-word; /* Permite quebra de linha para evitar ultrapassar a tela */
+    word-wrap: break-word;
+    white-space: pre-wrap;  /* Mantém a formatação de quebras e espaços */
+    text-align: center;  /* Ajusta o texto para ficar centralizado */
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 768px) {
+    #typed-grid {
+        font-size: 1.5rem;  /* Reduz o tamanho da fonte para telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    #typed-grid {
+        font-size: 1.2rem;  /* Ajuste ainda menor para telas muito pequenas */
+    }
+}
+
+.competencias-titulo {
+    color: #00ff7f;
+    text-align: left;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    border-left: 4px solid #00ff7f;
+    padding-left: 15px;
+}
