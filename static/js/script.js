@@ -16,41 +16,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
 
     let menuOpen = false;
-
     let isTransitioning = false;
 
     menuToggle.addEventListener('click', () => {
-        if (isTransitioning) return; // Impede cliques múltiplos durante a transição
-    
+        if (isTransitioning) return;
+
         menuToggle.classList.toggle('active');
         isTransitioning = true;
-    
+
         if (!menuOpen) {
-            // Abre o menu
             overlay.classList.add('active');
-    
+
             const onTransitionEnd = () => {
                 sidebar.classList.add('open');
                 overlay.removeEventListener('transitionend', onTransitionEnd);
                 menuOpen = true;
                 isTransitioning = false;
             };
-    
+
             overlay.addEventListener('transitionend', onTransitionEnd);
-    
         } else {
-            // Fecha o menu
             sidebar.classList.remove('open');
-    
-            // Aguarda a animação da sidebar antes de fechar o overlay
             setTimeout(() => {
                 overlay.classList.remove('active');
                 menuOpen = false;
                 isTransitioning = false;
-            }, 300); // Esse valor deve ser igual à transição do CSS da sidebar
+            }, 300);
         }
     });
-    
 
     // Intersection Observer - seção Sobre
     const sobreSection = document.querySelector('#sobre');
@@ -81,10 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(sobreSection);
     }
 
-    // Scroll snapping
-    let isScrolling = false;
-    const scrollDelay = 800;
-
     // Intersection Observer - seção Competências
     const competenciasSection = document.querySelector('#competencias');
     const observerCompetencias = new IntersectionObserver((entries) => {
@@ -92,9 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 new Typed('#typed-competencias', {
                     strings: [`
-    HTML       CSS        JavaScript     Python      SQL
-    Git/GitHub Linux      Flask          Bootstrap   Scrum
-                `],
+HTML       CSS        JavaScript     Python      SQL
+Git/GitHub Linux      Flask          Bootstrap   Scrum
+                    `],
                     typeSpeed: 20,
                     backSpeed: 10,
                     showCursor: true,
@@ -114,6 +103,38 @@ document.addEventListener('DOMContentLoaded', () => {
         observerCompetencias.observe(competenciasSection);
     }
 
+    // Intersection Observer - seção Experiências
+    const experienciasSection = document.querySelector('#experiencias');
+    const observerExperiencias = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                new Typed('#typed-experiencias', {
+                    strings: [
+                        'Empresa XYZ (2022 - Atual)<br>Desenvolvedor Júnior - Desenvolvimento de aplicações web com Flask, manutenção de sistemas legados.<br><br>' +
+                        'Empresa ABC (2021 - 2022)<br>Estagiário em TI - Apoio à equipe de desenvolvimento, documentação de sistemas, testes de software.'
+                    ],
+                    typeSpeed: 10,
+                    backSpeed: 20,
+                    showCursor: true,
+                    cursorChar: '|',
+                    loop: false,
+                    contentType: 'html'
+                });
+
+                observerExperiencias.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+
+    if (experienciasSection) {
+        observerExperiencias.observe(experienciasSection);
+    }
+
+    // Scroll snapping
+    let isScrolling = false;
+    const scrollDelay = 800;
 
     document.addEventListener('wheel', (e) => {
         if (menuOpen || isScrolling) return;
@@ -139,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isScrolling = false;
         }, scrollDelay);
     }, { passive: false });
-    
 
     // Teclas de navegação
     document.addEventListener('keydown', (e) => {
@@ -193,6 +213,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Botão scroll down
-    
+    // Botão scroll down (pode ser ativado no futuro se desejar)
 });
