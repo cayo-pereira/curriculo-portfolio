@@ -5,9 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfólio - Cayo Pereira</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 </head>
 <body>
-  <header>
+  <!-- Menu Toggle (idêntico ao index.html) -->
+  <div id="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menu lateral" role="button" tabindex="0">
+    <div class="menu-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- Overlay (idêntico ao index.html) -->
+  <div id="menu-overlay"></div>
+
+  <!-- Sidebar (idêntico ao index.html com ajuste de links) -->
+  <div id="sidebar">
+    <ul class="menu-links">
+      <li><a href="/#sobre">Sobre Cayo</a></li>
+      <li><a href="/#competencias">Competências</a></li>
+      <li><a href="/#experiencias">Experiências</a></li>
+      <li><a href="/portfolio">Portfólio</a></li>
+      <li>
+        <a href="{{ url_for('static', filename='curriculo_cayo_pereira_resumido.pdf') }}" download>
+          Baixar Currículo Resumido
+        </a>
+      </li>
+    </ul>
+    <div class="social-icons">
+      <a href="mailto:seuemail@gmail.com">
+        <img src="{{ url_for('static', filename='img/gmail_icon.svg') }}" alt="Gmail">
+      </a>
+      <a href="https://linkedin.com/in/seulinkedin" target="_blank">
+        <img src="{{ url_for('static', filename='img/linkedin_icon.svg') }}" alt="LinkedIn">
+      </a>
+      <a href="https://wa.me/5521993181241" target="_blank">
+        <img src="{{ url_for('static', filename='img/whatsapp_icon.svg') }}" alt="WhatsApp">
+      </a>
+      <a href="https://github.com/cayo-pereira" target="_blank">
+        <img src="{{ url_for('static', filename='img/github_icon.svg') }}" alt="Github">
+      </a>
+    </div>
+  </div>
+
+  <header id="portfolio-header">
     <h1>Portfólio de Cayo Pereira</h1>
   </header>
 
@@ -17,5 +59,53 @@
       <p>Em breve você verá aqui uma lista com meus principais projetos.</p>
     </section>
   </main>
+
+  <!-- Script JS (deve ser criado um arquivo portfolio.js ou usar o existente) -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  
+  <!-- Adicione este script se não quiser criar um arquivo separado -->
+  <script>
+    // Controle do Menu Lateral (idêntico ao index.html)
+    function toggleSidebar() {
+      const menuToggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('menu-overlay');
+      const sidebar = document.getElementById('sidebar');
+      
+      let menuOpen = menuToggle.classList.contains('active');
+      let isTransitioning = false;
+
+      if (isTransitioning) return;
+
+      menuToggle.classList.toggle('active');
+      isTransitioning = true;
+
+      if (!menuOpen) {
+        overlay.classList.add('active');
+        
+        const onTransitionEnd = () => {
+          sidebar.classList.add('open');
+          overlay.removeEventListener('transitionend', onTransitionEnd);
+          isTransitioning = false;
+        };
+
+        overlay.addEventListener('transitionend', onTransitionEnd);
+      } else {
+        sidebar.classList.remove('open');
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          isTransitioning = false;
+        }, 300);
+      }
+    }
+
+    // Fechar menu ao clicar nos links
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (document.getElementById('menu-toggle').classList.contains('active')) {
+          toggleSidebar();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
