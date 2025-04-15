@@ -198,6 +198,15 @@ Git/GitHub Linux      Flask          Bootstrap   Scrum
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
 
+            // Fecha o menu quando clicar em um link
+            if (menuOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuOpen = false;
+                isTransitioning = false;
+            }
+
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 isScrolling = true;
