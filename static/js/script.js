@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 new Typed('#typed-sobre', {
                     strings: [
                         'Atualmente tenho 27 anos, resido em Nilópolis/RJ, estou no ultimo período do curso de engenharia da computação e estou\n\n' +
+
                         'buscando experiências novas no setor de T.I. Procuro vagas como Trainee ou analista, em áreas como desenvolvimento de sistemas,\n' +
                         'analise de dados, gestão de projetos, governança de T.I.'
                     ],
@@ -81,12 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 new Typed('#typed-competencias', {
                     strings: [`
-HTML       CSS        JavaScript     Python      SQL
-Git/GitHub Linux      Flask          Bootstrap   Scrum
+                        <div class="competencias-grid">
+                            <div>• Pacote Office<br>• Pacote Adobe<br>• Inglês<br>• Scrum<br>• COBIT<br>• ITIL</div>
+                            <div>• HTML<br>• CSS<br>• Plone<br>• Drupal<br>• Gestão de projetos<br>• Python</div>
+                            <div>• Power BI<br>• Benner<br>• JIRA<br>• Lógica<br>• Resolução de problemas<br>• Organização</div>
+                            <div>• Comunicação<br>• Trabalho em equipe<br>• Planejamento<br>• Resiliência<br>• Atendimento ao cliente</div>
+                        </div>
                     `],
+                    
                     typeSpeed: 20,
                     backSpeed: 10,
-                    showCursor: true,
+                    showCursor: false,
                     cursorChar: '|',
                     loop: false,
                     contentType: 'html'
