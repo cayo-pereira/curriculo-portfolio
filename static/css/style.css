@@ -291,7 +291,7 @@ section p {
 #typed-competencias .competencias-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 colunas no desktop */
-    gap: 12px; /* Espaço entre colunas */
+    gap: 12px;
     max-width: 100%;
     word-break: break-word;
     white-space: pre-line;
@@ -309,14 +309,14 @@ section p {
 }
 /* Tablet - 2 colunas */
 @media (max-width: 1024px) {
-    #typed-competencias {
+    #typed-competencias .competencias-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 /* Celular - 1 coluna */
 @media (max-width: 600px) {
-    #typed-competencias {
+    #typed-competencias .competencias-grid {
         grid-template-columns: 1fr;
     }
 }
