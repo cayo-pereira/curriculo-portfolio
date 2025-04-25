@@ -116,8 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 new Typed('#typed-experiencias', {
                     strings: [
-                        'Empresa XYZ (2022 - Atual)<br>Desenvolvedor Júnior - Desenvolvimento de aplicações web com Flask, manutenção de sistemas legados.<br><br>' +
-                        'Empresa ABC (2021 - 2022)<br>Estagiário em TI - Apoio à equipe de desenvolvimento, documentação de sistemas, testes de software.'
+                        'Ao decorrer da minha vida sempre estudei e trabalhei para melhorar meus atributos, ja tive experiêcias de trabalho com atendimento ao cliente, '+
+                        'trabalho em equipe, cumprimento de prazos e até mesmo liderança.'+
+                        'Também alguns trabalhos mais específicos como freelancer de design gráfico e suporte de T.I (remoto e presencial), tanto no hardware como software.'+
+                        '<br>Abaixo minhas experiências:'+
+                        '<br><br>Nuclep (2024 - Atual)<br>Estagiário em Assistência de transformação digital.<br>Manutenção de softwares internos, desenvolvimento de site em drupal e plone além de suporte ao usuário.' +
+                        ' Testes de software, apoio a equipe e desenvolvimento de sistemas web em python, js, flask, html e css.<br><br>'+
+                        'Autônomo (2020 - Atual)<br>Suporte técnico para computadores<br>Montagem e manutenção de computadores, limpeza, formação e consultoria.<br><br>'+
+                        'Nuclep (2023 - 2024)<br>Estagiário em Governança de T.I.<br>Elaboração de documentos, estudos para contratação, apoio na gestão de projetos (COBIT, ITIL e metodologias ágeis).'
                     ],
                     typeSpeed: 10,
                     backSpeed: 20,
@@ -136,6 +142,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (experienciasSection) {
         observerExperiencias.observe(experienciasSection);
+    }
+
+        // Intersection Observer - seção Experiências 2
+    const experiencias2Section = document.querySelector('#experiencias2');
+    const observerExperiencias2 = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                new Typed('#typed-experiencias2', {
+                    strings: [
+                        'Autônomo (2021 - 2023)<br>Freelancer Design Gráfico.<br>Logotipo e identidade de marca, posts personalizados de redes sociais e divulgações de eventos como flyers.<br><br>'+
+                        'ESPRO (Ensino Social Profissionalizante) (2018 - 2019)<br>Jovem Aprendiz<br>Atendimento ao cliente e trabalho em equipe.'
+                    ],
+                    typeSpeed: 10,
+                    backSpeed: 20,
+                    showCursor: true,
+                    cursorChar: '|',
+                    loop: false,
+                    contentType: 'html'
+                });
+    
+                observerExperiencias2.unobserve(entry.target);
+            }
+        });
+    }, {
+            threshold: 0.5
+    });
+    
+    if (experiencias2Section) {
+        observerExperiencias2.observe(experiencias2Section);
+    }
+
+        // Intersection Observer - seção Educação
+    const educacaoSection = document.querySelector('#educacao');
+    const observerEducacao = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                new Typed('#typed-educacao', {
+                    strings: [
+                        'Minha formação educacional:<br><br>' +
+                        'Bacharel em Engenharia da Computação<br>Universidade Cândido Mendes (07/2021 - 07/2025).<br><br>' +
+                        'Cursos complementares:<br>• Microsoft Security, Compliance, and Identity Fundamentals, Tecnologia da Informação (Microsoft).<br>'+
+                        '• Fundamentos da Lei Geral de Proteção de Dados (Enap).<br>• Uso do Lean e Inception na Administração Pública (Enap).<br>'+
+                        '• Scrum no Contexto do Serviço Público (Enap).<br>• Jira e Confluence (Canal Valor).<br>• Curso Design Gráfico Completo 10 Cursos do Zero ao Avançado (Udemy).'
+                    ],
+                    typeSpeed: 10,
+                    backSpeed: 20,
+                    showCursor: true,
+                    cursorChar: '|',
+                    loop: false,
+                    contentType: 'html'
+                });
+
+                observerEducacao.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+
+    if (educacaoSection) {
+        observerEducacao.observe(educacaoSection);
     }
 
     // Scroll snapping

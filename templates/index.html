@@ -24,6 +24,8 @@
       <li><a href="#sobre">Sobre Cayo</a></li>
       <li><a href="#competencias">Competências</a></li>
       <li><a href="#experiencias">Experiências</a></li>
+      <li><a href="#experiencias2">Continuação Experiências</a></li>
+      <li><a href="#educacao">Educação</a></li>
       <li><a href="/portfolio">Portfólio</a></li>
       <li><a href="{{ url_for('static', filename='curriculo_cayo_pereira_resumido.pdf') }}" download>Baixar Currículo Resumido</a></li>
     </ul>
@@ -76,7 +78,7 @@
     </section>
 
     <section id="experiencias">
-      <a href="#header" class="scroll-down-btn" aria-label="Voltar ao topo">
+      <a href="#experiencias2" class="scroll-down-btn" aria-label="Ir para a continuação de experiências">
         <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
           <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
         </svg>
@@ -88,6 +90,35 @@
         </div>
       </div>
     </section>
+
+    <!-- EXPERIÊNCIAS 2 -->
+    <section id="experiencias2">
+      <a href="#educacao" class="scroll-down-btn" aria-label="Ir para a seção educação">
+        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+        </svg>
+      </a>
+      <div class="sobre-container">
+        <h2 class="sobre-titulo">Continuação das Experiências</h2>
+        <div class="sobre-texto">
+          <span id="typed-experiencias2"></span>
+      </div>
+    </section>
+
+    <!-- EDUCAÇÃO -->
+    <section id="educacao">
+      <a href="#header" class="scroll-down-btn" aria-label="Ir para o inicio">
+        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+        </svg>
+      </a>
+      <div class="sobre-container">
+        <h2 class="sobre-titulo">Educação</h2>
+        <div class="sobre-texto">
+          <span id="typed-educacao"></span>
+      </div>
+    </section>
+
   </main> 
 
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
