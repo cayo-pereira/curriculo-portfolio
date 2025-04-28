@@ -359,16 +359,14 @@ function openModal(index) {
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-image');
     
+    modal.style.display = 'flex'; // Mudado para flex
     modalImg.src = images[currentImageIndex];
-    modal.style.display = 'flex'; // Alterado para flex para centralização
     
-    // Forçar redimensionamento após carregamento da imagem
-    modalImg.onload = function() {
-        centerModalImage();
-    };
-    
-    // Centralizar também se a imagem já estiver em cache
-    setTimeout(centerModalImage, 100);
+    // Forçar recálculo do layout
+    setTimeout(() => {
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+    }, 10);
 }
 
 function centerModalImage() {
