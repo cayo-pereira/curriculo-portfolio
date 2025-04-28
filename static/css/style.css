@@ -386,30 +386,90 @@ section p {
     display: block;
   }
 
-/* Modal */
-    #image-modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9); /* Fundo mais escuro */
-        align-items: center;
-        justify-content: center;
-  }
-/* texto */
-    #image-modal .modal-content {
-        position: relative;
-        max-width: 90%;
-        max-height: 90%;
-  }
+/* Modal - Estilos Atualizados */
+#image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+}
 
-    #image-modal img {
-        max-width: 100%;
-        max-height: 80vh;
-        object-fit: contain;
-        border: 2px solid #00ff7f;
-        border-radius: 8px;
-  }
+#image-modal .modal-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#image-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 2px solid #00ff7f;
+    border-radius: 8px;
+}
+
+/* Botão Fechar (X) - Estilo Melhorado */
+#close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #00ff7f;
+    font-size: 2.5rem;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#close-btn:hover {
+    transform: scale(1.2);
+    color: #ffffff;
+}
+
+/* Setas de Navegação - Estilo Melhorado */
+.modal-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #00ff7f;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.modal-arrow:hover {
+    background-color: rgba(0, 255, 127, 0.3);
+    color: white;
+}
+
+#prev-btn {
+    left: 20px;
+}
+
+#next-btn {
+    right: 20px;
+}

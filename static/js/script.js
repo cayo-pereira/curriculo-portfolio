@@ -354,6 +354,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function openModal(index) {
+    currentImageIndex = index;
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-image');
+    
+    modalImg.src = images[currentImageIndex];
+    modal.style.display = 'flex'; // Alterado para flex para centralização
+    
+    // Forçar redimensionamento após carregamento da imagem
+    modalImg.onload = function() {
+        centerModalImage();
+    };
+    
+    // Centralizar também se a imagem já estiver em cache
+    setTimeout(centerModalImage, 100);
+}
+
+function centerModalImage() {
+    const modalContent = document.querySelector('.modal-content');
+    const modalImg = document.getElementById('modal-image');
+    
+    // Centraliza verticalmente
+    modalContent.style.display = 'flex';
+    modalContent.style.alignItems = 'center';
+    modalContent.style.justifyContent = 'center';
+}
+
+// Adicione este evento para redimensionamento na janela
+window.addEventListener('resize', function() {
+    if (document.getElementById('image-modal').style.display === 'flex') {
+        centerModalImage();
+    }
+});
+
 
 
     // Botão scroll down (pode ser ativado no futuro se desejar)

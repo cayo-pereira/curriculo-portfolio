@@ -84,17 +84,18 @@
         </div>
       </div>
     </section>
-
+    
     <!-- Modal de Exibição das Imagens -->
     <div id="image-modal" class="modal">
-      <button id="close-btn" onclick="closeModal()">&times;</button>
-      <div class="modal-content">
-        <img id="modal-image" src="" alt="">
-        <button id="prev-btn" class="modal-arrow" onclick="navigateImage(-1)">&#8592;</button> <!-- esquerda -->
-        <button id="next-btn" class="modal-arrow" onclick="navigateImage(1)">&#8594;</button> <!-- direita -->
-      </div>
+        <button id="close-btn" onclick="closeModal()">&times;</button>
+        <div class="modal-content">
+            <img id="modal-image" src="" alt="">
+            <button id="prev-btn" class="modal-arrow" onclick="navigateImage(-1)">&#10094;</button>
+            <button id="next-btn" class="modal-arrow" onclick="navigateImage(1)">&#10095;</button>
+        </div>
     </div>
-  </main>
+
+
 
   <!-- Script JS -->
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
