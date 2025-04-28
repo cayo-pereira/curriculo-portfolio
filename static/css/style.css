@@ -322,3 +322,94 @@ section p {
         grid-template-columns: 1fr;
     }
 }
+
+/* --------------------------------------------------
+   GALERIA “BARALHO” COM CSS VARIÁVEIS
+   -------------------------------------------------- */
+
+   .project-gallery {
+    --cards: 7;                      /* número total de cartas */
+    --mid: calc((var(--cards) + 1) / 2);
+    --gap: 50px;                     /* distância base entre cartas */
+    --angle: 8deg;                   /* ângulo base de rotação */
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    margin: 60px 0;
+    perspective: 800px;
+    overflow: hidden;
+    align-items: center;
+  }
+  
+  /* cada carta usa sua var(--i) para calcular offset */
+  .project-item {
+    --offset: calc(var(--i) - var(--mid));
+    position: absolute;
+    top: 0; left: 50%;
+    width: 210px;
+    height: 140px;
+    margin-left: -90px;             /* centra o eixo X */
+    margin-top: 40px;
+  
+    transform-origin: bottom center;
+    transform:
+      translateX(calc(var(--offset) * var(--gap) * 0.5))
+      rotate(calc(var(--offset) * var(--angle) * 0.4));
+    transition: transform 0.5s ease, box-shadow 0.3s ease;
+  
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  
+    z-index: calc(100 - abs(var(--offset))); /* cartas centrais por cima */
+  }
+  
+  /* ao “abrir” o baralho: distância e rotação maior */
+  .project-gallery.spread .project-item {
+    transform:
+      translateX(calc(var(--offset) * var(--gap)))
+      rotate(calc(var(--offset) * var(--angle)));
+  }
+  
+  /* efeito hover individual: escala + sombra + z-index */
+  .project-item:hover {
+    transform: translateX(0) rotate(0) scale(1.2) !important;
+    z-index: 200 !important;
+    box-shadow: 0 10px 30px rgba(0, 255, 127, 0.6);
+  }
+  
+  /* imagens dentro das cartas */
+  .project-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+/* Modal */
+    #image-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9); /* Fundo mais escuro */
+        align-items: center;
+        justify-content: center;
+  }
+/* texto */
+    #image-modal .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+  }
+
+    #image-modal img {
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        border: 2px solid #00ff7f;
+        border-radius: 8px;
+  }

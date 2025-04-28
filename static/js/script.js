@@ -295,5 +295,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+document.addEventListener('DOMContentLoaded', () => {
+  const gallery = document.querySelector('.project-gallery');
+
+  gallery.addEventListener('mouseenter', () => {
+    gallery.classList.add('spread');
+  });
+
+  gallery.addEventListener('mouseleave', () => {
+    gallery.classList.remove('spread');
+  });
+
+
+// restante do seu código de modal (openModal, closeModal, navigateImage…)
+
+    // Efeito de dispersão quando o mouse entra na galeria
+    gallery.addEventListener('mouseenter', () => {
+        projectItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.transition = 'all 0.5s ease';
+                const offsetX = (index - 3) * 30;  // Dispersão mais leve
+                const offsetRotation = (index - 3) * 10; // Ainda um pouco mais aberto
+
+                item.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg)`;
+                item.style.zIndex = index === 3 ? 10 : Math.abs(index - 3); // Central fica por cima
+            }, index * 50);
+        });
+    });
+
+    gallery.addEventListener('mouseleave', () => {
+        projectItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.transition = 'all 0.5s ease';
+                const offsetX = (index - 3) * 15; // Volta à posição inicial
+                const offsetRotation = (index - 3) * 3;
+                item.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg)`;
+                item.style.zIndex = index === 3 ? 10 : Math.abs(index - 3);
+            }, index * 30);
+        });
+    });
+
+    // Efeito hover individual - destaca a imagem
+    projectItems.forEach((item) => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(0) rotate(0deg) scale(1.2)';
+            this.style.zIndex = 20;
+            this.style.boxShadow = '0 10px 25px rgba(0, 255, 127, 0.7)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            const index = Array.from(projectItems).indexOf(this);
+            const offsetX = (index - 3) * (gallery.matches(':hover') ? 60 : 15);
+            const offsetRotation = (index - 3) * (gallery.matches(':hover') ? 10 : 3);
+            this.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg) scale(1)`;
+            this.style.zIndex = index === 3 ? 10 : Math.abs(index - 3);
+            this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+        });
+    });
+});
+
+
+
     // Botão scroll down (pode ser ativado no futuro se desejar)
 });

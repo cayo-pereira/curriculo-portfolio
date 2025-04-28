@@ -58,55 +58,73 @@
     <section>
       <h2>Projetos em destaque</h2>
       <p>Em breve você verá aqui uma lista com meus principais projetos.</p>
+    
+      <!-- Imagens de Projetos -->
+      <div class="project-gallery">
+        <div class="project-item" style="--i:1" onclick="openModal(0)">
+          <img src="{{ url_for('static', filename='img/agen-consu-adm.png') }}" alt="Projeto 1">
+        </div>
+        <div class="project-item" style="--i:2" onclick="openModal(1)">
+          <img src="{{ url_for('static', filename='img/agen-consu-home.png') }}" alt="Projeto 2">
+        </div>
+        <div class="project-item" style="--i:3" onclick="openModal(2)">
+          <img src="{{ url_for('static', filename='img/port-1.png') }}" alt="Projeto 3">
+        </div>
+        <div class="project-item" style="--i:4" onclick="openModal(3)">
+          <img src="{{ url_for('static', filename='img/port-home-film.png') }}" alt="Projeto 4">
+        </div>
+        <div class="project-item" style="--i:5" onclick="openModal(4)">
+          <img src="{{ url_for('static', filename='img/port-sort-film.png') }}" alt="Projeto 5">
+        </div>
+        <div class="project-item" style="--i:6" onclick="openModal(5)">
+          <img src="{{ url_for('static', filename='img/port-sugestoes-film.png') }}" alt="Projeto 6">
+        </div>
+        <div class="project-item" style="--i:7" onclick="openModal(6)">
+          <img src="{{ url_for('static', filename='img/port-admin-filmes.png') }}" alt="Projeto 7">
+        </div>
+      </div>
     </section>
+
+    <!-- Modal de Exibição das Imagens -->
+    <div id="image-modal" class="modal">
+      <button id="close-btn" onclick="closeModal()">&times;</button>
+      <div class="modal-content">
+        <img id="modal-image" src="" alt="">
+        <button id="prev-btn" class="modal-arrow" onclick="navigateImage(-1)">&#8592;</button> <!-- esquerda -->
+        <button id="next-btn" class="modal-arrow" onclick="navigateImage(1)">&#8594;</button> <!-- direita -->
+      </div>
+    </div>
   </main>
 
-  <!-- Script JS (deve ser criado um arquivo portfolio.js ou usar o existente) -->
+  <!-- Script JS -->
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  
-  <!-- Adicione este script se não quiser criar um arquivo separado -->
+
   <script>
-    // Controle do Menu Lateral (idêntico ao index.html)
-    function toggleSidebar() {
-      const menuToggle = document.getElementById('menu-toggle');
-      const overlay = document.getElementById('menu-overlay');
-      const sidebar = document.getElementById('sidebar');
-      
-      let menuOpen = menuToggle.classList.contains('active');
-      let isTransitioning = false;
+    const images = [
+      "{{ url_for('static', filename='img/agen-consu-adm.png') }}",
+      "{{ url_for('static', filename='img/agen-consu-home.png') }}",
+      "{{ url_for('static', filename='img/port-1.png') }}",
+      "{{ url_for('static', filename='img/port-home-film.png') }}",
+      "{{ url_for('static', filename='img/port-sort-film.png') }}",
+      "{{ url_for('static', filename='img/port-sugestoes-film.png') }}",
+      "{{ url_for('static', filename='img/port-admin-filmes.png') }}",
+    ];
+    let currentImageIndex = 0;
 
-      if (isTransitioning) return;
-
-      menuToggle.classList.toggle('active');
-      isTransitioning = true;
-
-      if (!menuOpen) {
-        overlay.classList.add('active');
-        
-        const onTransitionEnd = () => {
-          sidebar.classList.add('open');
-          overlay.removeEventListener('transitionend', onTransitionEnd);
-          isTransitioning = false;
-        };
-
-        overlay.addEventListener('transitionend', onTransitionEnd);
-      } else {
-        sidebar.classList.remove('open');
-        setTimeout(() => {
-          overlay.classList.remove('active');
-          isTransitioning = false;
-        }, 300);
-      }
+    function openModal(index) {
+      currentImageIndex = index;
+      document.getElementById('modal-image').src = images[currentImageIndex];
+      document.getElementById('image-modal').style.display = 'block';
     }
 
-    // Fechar menu ao clicar nos links
-    document.querySelectorAll('#sidebar a').forEach(link => {
-      link.addEventListener('click', () => {
-        if (document.getElementById('menu-toggle').classList.contains('active')) {
-          toggleSidebar();
-        }
-      });
-    });
+    function closeModal() {
+      document.getElementById('image-modal').style.display = 'none';
+    }
+
+    function navigateImage(direction) {
+      currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+      document.getElementById('modal-image').src = images[currentImageIndex];
+    }
   </script>
 </body>
 </html>
