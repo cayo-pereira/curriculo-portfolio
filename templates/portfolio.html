@@ -9,7 +9,7 @@
 </head>
 <body>
   <!-- Menu Toggle (idêntico ao index.html) -->
-  <div id="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menu lateral" role="button" tabindex="0">
+  <div id="menu-toggle" aria-label="Abrir menu lateral" role="button" tabindex="0">
     <div class="menu-icon">
       <span></span>
       <span></span>
@@ -23,11 +23,16 @@
   <!-- Sidebar (idêntico ao index.html com ajuste de links) -->
   <div id="sidebar">
     <ul class="menu-links">
-      <li><a href="/#header">Início</a></li>
+      <li><a href="#portfolio-header">Início</a></li>
+      <li><a href="#portfolio-sobre">Projetos em destaque</a></li>
+      <li><a href="#portfolio-sobre2">Continuação dos projetos</a></li>
+      <li><a href="#portfolio-galeria">Galeria de imagens</a></li>
+      <li><a href="/#header">Início do currículo</a></li>
       <li><a href="/#sobre">Sobre Cayo</a></li>
       <li><a href="/#competencias">Competências</a></li>
       <li><a href="/#experiencias">Experiências</a></li>
-      <li><a href="/portfolio">Portfólio</a></li>
+      <li><a href="/#experiencias2">Continuação Experiências</a></li>
+      <li><a href="/#educacao">Educação</a></li>
       <li>
         <a href="{{ url_for('static', filename='curriculo_cayo_pereira_resumido.pdf') }}" download>
           Baixar Currículo Resumido
@@ -35,10 +40,10 @@
       </li>
     </ul>
     <div class="social-icons">
-      <a href="mailto:seuemail@gmail.com">
+      <a href="mailto:cayopereira9.8@gmail.com">
         <img src="{{ url_for('static', filename='img/gmail_icon.svg') }}" alt="Gmail">
       </a>
-      <a href="https://linkedin.com/in/seulinkedin" target="_blank">
+      <a href="https://www.linkedin.com/in/cayo-pereira-b26387194/" target="_blank">
         <img src="{{ url_for('static', filename='img/linkedin_icon.svg') }}" alt="LinkedIn">
       </a>
       <a href="https://wa.me/5521993181241" target="_blank">
@@ -51,13 +56,13 @@
   </div>
 
   <header id="portfolio-header">
-    <h1>Portfólio de Cayo Pereira</h1>
+    <h1><span id="typed-portfolio-header"></span></h1>
     <a href="#portfolio-sobre" class="scroll-down-btn" aria-label="Ir para o portfolio">
-      <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
-        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-      </svg>
+        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+        </svg>
     </a>
-  </header>
+</header>
 
   <main>
 
