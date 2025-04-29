@@ -184,7 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Bacharel em Engenharia da Computação<br>Universidade Cândido Mendes (07/2021 - 07/2025).<br><br>' +
                         'Cursos complementares:<br>• Microsoft Security, Compliance, and Identity Fundamentals, Tecnologia da Informação (Microsoft).<br>'+
                         '• Fundamentos da Lei Geral de Proteção de Dados (Enap).<br>• Uso do Lean e Inception na Administração Pública (Enap).<br>'+
-                        '• Scrum no Contexto do Serviço Público (Enap).<br>• Jira e Confluence (Canal Valor).<br>• Curso Design Gráfico Completo 10 Cursos do Zero ao Avançado (Udemy).'
+                        '• Scrum no Contexto do Serviço Público (Enap).<br>• Jira e Confluence (Canal Valor).<br>• Curso Design Gráfico Completo 10 Cursos do Zero ao Avançado (Udemy).'+
+                        '<br><br>Clique no menu lateral para acessar meu portfólio ou entrar em contato.'
                     ],
                     typeSpeed: 10,
                     backSpeed: 20,
@@ -390,3 +391,66 @@ window.addEventListener('resize', function() {
 
     // Botão scroll down (pode ser ativado no futuro se desejar)
 });
+
+const portSobreSection = document.querySelector('#portfolio-sobre');
+const observerPortSobre = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            new Typed('#typed-portsobre', {
+                strings: [
+                    'Aqui estão alguns dos projetos que desenvolvi com dedicação e criatividade. Eles representam minha jornada, aprendizado e habilidades práticas em design, desenvolvimento de scripts em IA e desenvolvimento web, incluindo:<br><br>' +
+                    '• Aplicações Flask com banco de dados e APIs externas.<br>' +
+                    '• Sistemas de marcação com controle administrativo.<br>' +
+                    '• Layouts modernos, responsivos e acessíveis.'+
+                    '<br><br>Também já trabalhei em projetos internos de T.I na equipe de gestão e controle, atualizando catalogo de serviços, estruturando projetos e auxiliando na elaboração do planejamento estratégico do setor.'
+                ],
+                typeSpeed: 10,
+                backSpeed: 20,
+                showCursor: true,
+                cursorChar: '|',
+                loop: false,
+                contentType: 'html'
+            });
+
+            observerPortSobre.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.5
+});
+
+if (portSobreSection) {
+    observerPortSobre.observe(portSobreSection);
+}
+
+const portSobre2Section = document.querySelector('#portfolio-sobre2');
+const observerPortSobre2 = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            new Typed('#typed-portsobre2', {
+                strings: [
+                    'Nos projetos você vai encontrar:<br><br>• Um projeto de desenvolvimento do site institucional da empresa, desenvolvido em drupal e seguindo as normas vigentes. Esse projeto me ensinou muito sobre trabalho em equipe e atenção aos detalhes. link: https://www.nuclep.gov.br'+
+                    '<br>  (Uma observação importante é que eu também participei do desenvolvimento do antigo site em drupal, porém o site não existe mais.)'+
+                    '<br>• Um projeto de indicação de gêneros, títulos de filmes e sorteio utilizando a API do TMDB para uma página de sugestões.'+
+                    '<br>• Um projeto de agendamento de consultas que utiliza um banco de dados local com uma pagina adm para controle que inclui exclusão das consultas, login e filtro.'+
+                    '<br>• O site atual, feito para ser o meu curriculo web.'+
+                    '<br><br>Gostarei muito de explicar com mais detalhes via e-mail, reunião ou qualquer outro meio de contato presente no menu lateral, aguardo seu contato.'
+                ],
+                typeSpeed: 10,
+                backSpeed: 20,
+                showCursor: true,
+                cursorChar: '|',
+                loop: false,
+                contentType: 'html'
+            });
+
+            observerPortSobre2.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.5
+});
+
+if (portSobre2Section) {
+    observerPortSobre2.observe(portSobre2Section);
+}
