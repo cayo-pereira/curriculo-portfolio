@@ -1,26 +1,54 @@
+console.log('Carregou o script do carrossel');
+
+// Verificação inicial do Typed.js
+if (typeof Typed === 'undefined') {
+    console.error('Atenção: Typed.js não foi carregado corretamente!');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Efeito de digitação do header (portfolio.html)
+    if (document.querySelector('#typed-portfolio-header')) {
+        try {
+            new Typed('#typed-portfolio-header', {
+                strings: ['Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos.'],
+                typeSpeed: 20,
+                backSpeed: 30,
+                startDelay: 300,
+                showCursor: true,
+                cursorChar: '|',
+                loop: false,
+                contentType: 'html',
+                onBegin: (self) => self.el.innerHTML = '',
+                preStringTyped: (pos, self) => self.el.innerHTML = ''
+            });
+        } catch (e) {
+            console.error('Erro no Typed.js (header):', e);
+            document.querySelector('#typed-portfolio-header').innerHTML = 
+                'Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos.';
+        }
+    }
+    if (document.querySelector('#typed-text')) {
+        try {
+            new Typed('#typed-text', {
+                strings: [' print("Hello World") <br> Sejam bem vindos ao meu currículo e portfolio web.'],
+                typeSpeed: 30,
+                backSpeed: 40,
+                startDelay: 300,
+                showCursor: true,
+                cursorChar: '|',
+                loop: false,
+                contentType: 'html',
+                onBegin: (self) => self.el.innerHTML = '',
+                preStringTyped: (pos, self) => self.el.innerHTML = ''
+            });
+        } catch (e) {
+            console.error('Erro no Typed.js (header index):', e);
+            document.querySelector('#typed-text').innerHTML = 
+                ' print("Hello World") <br> Sejam bem vindos ao meu currículo e portfolio web.';
+        }
+    }
 
     // Configuração do Menu
-    function setupMenu() {
-        // ... seu código existente do menu ...
-    }
-    setupMenu();
-
-    // Efeito de digitação do header (portfolio.html) - ADICIONE ESTE BLOCO
-    if (document.querySelector('#typed-portfolio-header')) {
-        new Typed('#typed-portfolio-header', {
-            strings: ['Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos.'],
-            typeSpeed: 40,
-            backSpeed: 50,
-            showCursor: true,
-            cursorChar: '|',
-            loop: false,
-            contentType: 'html'
-        });
-    }
-
-
-    // Configuração do Menu (funciona em ambas as páginas)
     function setupMenu() {
         const menuToggle = document.getElementById('menu-toggle');
         const overlay = document.getElementById('menu-overlay');
@@ -58,84 +86,118 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Remove qualquer onclick existente e usa apenas o listener
         menuToggle.removeAttribute('onclick');
         menuToggle.addEventListener('click', toggleMenu);
 
-        // Fecha o menu ao clicar nos links
         document.querySelectorAll('#sidebar a').forEach(link => {
             link.addEventListener('click', () => {
-                if (menuOpen) {
-                    toggleMenu();
-                }
+                if (menuOpen) toggleMenu();
             });
         });
     }
     setupMenu();
+    
+    // Configuração do Carrossel
+    function setupCarousel() {
+        const items = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
+        const infoText = document.getElementById('carousel-info-text');
+        const prevBtn = document.querySelector('.carousel-arrow.prev');
+        const nextBtn = document.querySelector('.carousel-arrow.next');
+        
+        if (!items.length || !dots.length) return;
 
-    // Efeito de digitação do header (só no index.html)
-    if (document.querySelector('#typed-text')) {
-        new Typed('#typed-text', {
-            strings: [' print("Hello World") <br> Sejam bem vindos ao meu currículo e portfolio web.'],
-            typeSpeed: 40,
-            backSpeed: 50,
-            showCursor: true,
-            cursorChar: '|',
-            loop: false,
-            contentType: 'html'
-        });
-    }
+        let currentIndex = 0;
+        const infoTexts = [
+            'Informações sobre a imagem 1',
+            'Informações sobre a imagem 2',
+            'Informações sobre a imagem 3',
+            'Informações sobre a imagem 4',
+            'Informações sobre a imagem 5'
+        ];
 
-    // Galeria (só no portfolio.html)
-    if (document.querySelector('.project-gallery')) {
-        const gallery = document.querySelector('.project-gallery');
-        const projectItems = document.querySelectorAll('.project-item');
-
-        gallery.addEventListener('mouseenter', () => {
-            gallery.classList.add('spread');
-            projectItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.transition = 'all 0.5s ease';
-                    const offsetX = (index - 3) * 30;
-                    const offsetRotation = (index - 3) * 10;
-                    item.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg)`;
-                    item.style.zIndex = index === 3 ? 10 : Math.abs(index - 3);
-                }, index * 50);
-            });
-        });
-
-        gallery.addEventListener('mouseleave', () => {
-            gallery.classList.remove('spread');
-            projectItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.transition = 'all 0.5s ease';
-                    const offsetX = (index - 3) * 15;
-                    const offsetRotation = (index - 3) * 3;
-                    item.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg)`;
-                    item.style.zIndex = index === 3 ? 10 : Math.abs(index - 3);
-                }, index * 30);
-            });
-        });
-
-        projectItems.forEach((item) => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateX(0) rotate(0deg) scale(1.2)';
-                this.style.zIndex = 20;
-                this.style.boxShadow = '0 10px 25px rgba(0, 255, 127, 0.7)';
-            });
+        function showSlide(index) {
+            if (index >= items.length) index = 0;
+            if (index < 0) index = items.length - 1;
             
-            item.addEventListener('mouseleave', function() {
-                const index = Array.from(projectItems).indexOf(this);
-                const offsetX = (index - 3) * (gallery.matches(':hover') ? 60 : 15);
-                const offsetRotation = (index - 3) * (gallery.matches(':hover') ? 10 : 3);
-                this.style.transform = `translateX(${offsetX}px) rotate(${offsetRotation}deg) scale(1)`;
-                this.style.zIndex = index === 3 ? 10 : Math.abs(index - 3);
-                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+            items.forEach(item => {
+                item.style.opacity = '0';
+                item.classList.remove('active');
             });
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            items[index].style.opacity = '1';
+            items[index].classList.add('active');
+            dots[index].classList.add('active');
+            infoText.textContent = infoTexts[index];
+            
+            currentIndex = index;
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
         });
+
+        if (nextBtn) nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
+        if (prevBtn) prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') showSlide(currentIndex + 1);
+            if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
+        });
+
+        showSlide(0);
+    }
+    setupCarousel();
+
+    // Função auxiliar para os efeitos de digitação
+    function setupSectionObserver(sectionId, typedElementId, strings, options = {}) {
+        const section = document.querySelector(sectionId);
+        const typedElement = document.querySelector(typedElementId);
+        
+        if (!section || !typedElement) return;
+
+        // Fallback se Typed.js não estiver disponível
+        if (typeof Typed === 'undefined') {
+            typedElement.innerHTML = Array.isArray(strings) ? strings[0] : strings;
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    try {
+                        // Destrói instância anterior se existir
+                        if (typedElement._typed) {
+                            typedElement._typed.destroy();
+                        }
+                        
+                        typedElement._typed = new Typed(typedElement, {
+                            strings: Array.isArray(strings) ? strings : [strings],
+                            typeSpeed: options.typeSpeed || 5,
+                            backSpeed: options.backSpeed || 10,
+                            startDelay: 300,
+                            showCursor: options.showCursor !== false,
+                            cursorChar: '|',
+                            loop: false,
+                            contentType: 'html',
+                            onBegin: (self) => self.el.innerHTML = '',
+                            preStringTyped: (pos, self) => self.el.innerHTML = '',
+                            ...options
+                        });
+                    } catch (e) {
+                        console.error(`Erro no Typed.js (${typedElementId}):`, e);
+                        typedElement.innerHTML = Array.isArray(strings) ? strings[0] : strings;
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(section);
     }
 
-    // Seções do index.html
+    // Seções com efeito de digitação
     setupSectionObserver('#sobre', '#typed-sobre', [
         'Atualmente tenho 27 anos, resido em Nilópolis/RJ, estou no ultimo período do curso de engenharia da computação e estou\n\n' +
         'buscando experiências novas no setor de T.I. Procuro vagas como Trainee ou analista, em áreas como desenvolvimento de sistemas,\n' +
@@ -195,75 +257,15 @@ document.addEventListener('DOMContentLoaded', () => {
     ]);
 
     // Scroll snapping
-    setupScrollSnapping();
+    function setupScrollSnapping() {
+        let isScrolling = false;
+        const scrollDelay = 800;
 
-    // Âncoras suaves
-    setupSmoothAnchors();
-});
+        document.addEventListener('wheel', (e) => {
+            if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
 
-// Funções auxiliares
-function setupSectionObserver(sectionId, typedElementId, strings, options = {}) {
-    const section = document.querySelector(sectionId);
-    if (!section) return;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                new Typed(typedElementId, {
-                    strings,
-                    typeSpeed: options.typeSpeed || 10,
-                    backSpeed: options.backSpeed || 20,
-                    showCursor: options.showCursor !== false,
-                    cursorChar: '|',
-                    loop: false,
-                    contentType: 'html',
-                    ...options
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    observer.observe(section);
-}
-
-function setupScrollSnapping() {
-    let isScrolling = false;
-    const scrollDelay = 800;
-
-    document.addEventListener('wheel', (e) => {
-        if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
-
-        isScrolling = true;
-        const delta = Math.sign(e.deltaY);
-        const currentScroll = window.scrollY;
-        const windowHeight = window.innerHeight;
-
-        let targetScroll;
-        if (delta > 0) {
-            targetScroll = Math.floor(currentScroll / windowHeight) * windowHeight + windowHeight;
-        } else {
-            targetScroll = Math.max(0, Math.ceil(currentScroll / windowHeight) * windowHeight - windowHeight);
-        }
-
-        window.scrollTo({
-            top: targetScroll,
-            behavior: 'smooth'
-        });
-
-        setTimeout(() => {
-            isScrolling = false;
-        }, scrollDelay);
-    }, { passive: false });
-
-    document.addEventListener('keydown', (e) => {
-        if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
-
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
             isScrolling = true;
-
-            const delta = e.key === 'ArrowDown' ? 1 : -1;
+            const delta = Math.sign(e.deltaY);
             const currentScroll = window.scrollY;
             const windowHeight = window.innerHeight;
 
@@ -282,42 +284,73 @@ function setupScrollSnapping() {
             setTimeout(() => {
                 isScrolling = false;
             }, scrollDelay);
-        }
-    });
-}
+        }, { passive: false });
 
-function setupSmoothAnchors() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
 
-            // Fecha o menu se estiver aberto
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar?.classList.contains('open')) {
-                document.getElementById('menu-toggle').classList.remove('active');
-                document.getElementById('menu-overlay').classList.remove('active');
-                sidebar.classList.remove('open');
-            }
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                isScrolling = true;
 
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                let isScrolling = true;
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                const delta = e.key === 'ArrowDown' ? 1 : -1;
+                const currentScroll = window.scrollY;
+                const windowHeight = window.innerHeight;
+
+                let targetScroll;
+                if (delta > 0) {
+                    targetScroll = Math.floor(currentScroll / windowHeight) * windowHeight + windowHeight;
+                } else {
+                    targetScroll = Math.max(0, Math.ceil(currentScroll / windowHeight) * windowHeight - windowHeight);
+                }
+
+                window.scrollTo({
+                    top: targetScroll,
+                    behavior: 'smooth'
                 });
 
                 setTimeout(() => {
                     isScrolling = false;
-                }, 800);
+                }, scrollDelay);
             }
         });
-    });
-}
+    }
+    setupScrollSnapping();
 
-// Funções do Modal (para portfolio.html)
+    // Âncoras suaves
+    function setupSmoothAnchors() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar?.classList.contains('open')) {
+                    document.getElementById('menu-toggle').classList.remove('active');
+                    document.getElementById('menu-overlay').classList.remove('active');
+                    sidebar.classList.remove('open');
+                }
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    let isScrolling = true;
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, 800);
+                }
+            });
+        });
+    }
+    setupSmoothAnchors();
+});
+
+// Funções do Modal
 function openModal(index) {
     const images = [
         "{{ url_for('static', filename='img/agen-consu-adm.png') }}",
@@ -336,7 +369,6 @@ function openModal(index) {
     modal.style.display = 'flex';
     modalImg.src = images[currentImageIndex];
     
-    // Forçar recálculo do layout
     setTimeout(() => {
         modal.style.alignItems = 'center';
         modal.style.justifyContent = 'center';
@@ -362,7 +394,6 @@ function navigateImage(direction) {
     document.getElementById('modal-image').src = images[currentImageIndex];
 }
 
-// Centraliza a imagem do modal ao redimensionar
 window.addEventListener('resize', function() {
     if (document.getElementById('image-modal')?.style.display === 'flex') {
         const modal = document.getElementById('image-modal');

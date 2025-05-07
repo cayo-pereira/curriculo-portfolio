@@ -323,159 +323,107 @@ section p {
     }
 }
 
-/* --------------------------------------------------
-   GALERIA “BARALHO” COM CSS VARIÁVEIS
-   -------------------------------------------------- */
-
-   .project-gallery {
-    --cards: 7;                      /* número total de cartas */
-    --mid: calc((var(--cards) + 1) / 2);
-    --gap: 50px;                     /* distância base entre cartas */
-    --angle: 8deg;                   /* ângulo base de rotação */
+/* Carrossel */
+.carousel-container {
     position: relative;
     width: 100%;
-    min-height: 200px;
-    margin: 60px 0;
-    perspective: 800px;
-    overflow: hidden;
-    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    aspect-ratio: 16/9;
   }
   
-  /* cada carta usa sua var(--i) para calcular offset */
-  .project-item {
-    --offset: calc(var(--i) - var(--mid));
-    position: absolute;
-    top: 0; left: 50%;
-    width: 210px;
-    height: 140px;
-    margin-left: -90px;             /* centra o eixo X */
-    margin-top: 40px;
-  
-    transform-origin: bottom center;
-    transform:
-      translateX(calc(var(--offset) * var(--gap) * 0.5))
-      rotate(calc(var(--offset) * var(--angle) * 0.4));
-    transition: transform 0.5s ease, box-shadow 0.3s ease;
-  
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    overflow: hidden;
-  
-    z-index: calc(100 - abs(var(--offset))); /* cartas centrais por cima */
-  }
-  
-  /* ao “abrir” o baralho: distância e rotação maior */
-  .project-gallery.spread .project-item {
-    transform:
-      translateX(calc(var(--offset) * var(--gap)))
-      rotate(calc(var(--offset) * var(--angle)));
-  }
-  
-  /* efeito hover individual: escala + sombra + z-index */
-  .project-item:hover {
-    transform: translateX(0) rotate(0) scale(1.2) !important;
-    z-index: 200 !important;
-    box-shadow: 0 10px 30px rgba(0, 255, 127, 0.6);
-  }
-  
-  /* imagens dentro das cartas */
-  .project-item img {
+  .carousel {
+    position: relative;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    overflow: hidden;
   }
-
-/* Modal - Estilos Atualizados */
-#image-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.9);
-    align-items: center;
-    justify-content: center;
-}
-
-#image-modal .modal-content {
-    position: relative;
-    width: 90vw;
-    height: 90vh;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#image-modal img {
+  
+  .carousel-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
-    border: 2px solid #00ff7f;
-    border-radius: 8px;
-    margin: auto;
-}
-
-/* Botão Fechar (X) - Estilo Melhorado */
-#close-btn {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    object-fit: contain; /* Garante que a imagem inteira será vista */
+  }
+  
+  .carousel-item.active {
+    display: block !important;
+    opacity: 1 !important;
+  }
+  
+  .carousel-dots {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: #00ff7f;
-    font-size: 2.5rem;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    z-index: 1001;
-    transition: all 0.3s ease;
+    transition: background 0.3s;
+  }
+  
+  .dot.active {
+    background: #00ff7f;
+  }
+  
+  .carousel-info {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+  }
+
+  /* Setas de navegação */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#close-btn:hover {
-    transform: scale(1.2);
-    color: #ffffff;
-}
-
-/* Setas de Navegação - Estilo Melhorado */
-.modal-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #00ff7f;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
     border: none;
-    font-size: 2.5rem;
-    cursor: pointer;
-    width: 60px;
-    height: 60px;
     border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    z-index: 1001;
-}
-
-.modal-arrow:hover {
-    background-color: rgba(0, 255, 127, 0.3);
-    color: white;
-}
-
-#prev-btn {
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#next-btn {
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-}
+  }
+  
+  .carousel-arrow:hover {
+    background: rgba(0, 255, 127, 0.8);
+  }
+  
+  .prev {
+    left: 15px;
+  }
+  
+  .next {
+    right: 15px;
+  }
+  
+  /* Melhoria na acessibilidade */
+  .carousel-arrow:focus {
+    outline: 2px solid #00ff7f;
+    outline-offset: 2px;
+  }

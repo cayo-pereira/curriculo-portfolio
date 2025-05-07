@@ -101,73 +101,41 @@
       <div class="sobre-container">
         <h2 class="sobre-titulo">Galeria de imagens</h2>
         </div>
-      <!-- Imagens de Projetos -->
-      <div class="project-gallery">
-        <div class="project-item" style="--i:1" onclick="openModal(0)">
-          <img src="{{ url_for('static', filename='img/agen-consu-adm.png') }}" alt="Projeto 1">
-        </div>
-        <div class="project-item" style="--i:2" onclick="openModal(1)">
-          <img src="{{ url_for('static', filename='img/agen-consu-home.png') }}" alt="Projeto 2">
-        </div>
-        <div class="project-item" style="--i:3" onclick="openModal(2)">
-          <img src="{{ url_for('static', filename='img/port-1.png') }}" alt="Projeto 3">
-        </div>
-        <div class="project-item" style="--i:4" onclick="openModal(3)">
-          <img src="{{ url_for('static', filename='img/port-home-film.png') }}" alt="Projeto 4">
-        </div>
-        <div class="project-item" style="--i:5" onclick="openModal(4)">
-          <img src="{{ url_for('static', filename='img/port-sort-film.png') }}" alt="Projeto 5">
-        </div>
-        <div class="project-item" style="--i:6" onclick="openModal(5)">
-          <img src="{{ url_for('static', filename='img/port-sugestoes-film.png') }}" alt="Projeto 6">
-        </div>
-        <div class="project-item" style="--i:7" onclick="openModal(6)">
-          <img src="{{ url_for('static', filename='img/port-admin-filmes.png') }}" alt="Projeto 7">
-        </div>
+
+    <div class="carousel-container">
+      <button class="carousel-arrow prev" aria-label="Imagem anterior">❮</button>
+      <button class="carousel-arrow next" aria-label="Próxima imagem">❯</button>
+      <div class="carousel">
+        <!-- Imagens do carrossel -->
+        <img src="{{ url_for('static', filename='img/agen-consu-adm.png') }}" alt="Imagem 1" class="carousel-item active">
+        <img src="{{ url_for('static', filename='img/agen-consu-home.png') }}" alt="Imagem 2" class="carousel-item">
+        <img src="{{ url_for('static', filename='img/port-1.png') }}" alt="Imagem 3" class="carousel-item">
+        <img src="{{ url_for('static', filename='img/port-admin-filmes.png') }}" alt="Imagem 4" class="carousel-item">
+        <img src="{{ url_for('static', filename='img/port-home-film.png') }}" alt="Imagem 5" class="carousel-item">
       </div>
+        
+        
+      <!-- Bolinhas de navegação -->
+      <div class="carousel-dots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+        <span class="dot" data-index="3"></span>
+        <span class="dot" data-index="4"></span>
+      </div>
+        
+      <!-- Barra de informações -->
+      <div class="carousel-info">
+        <p id="carousel-info-text">Informações sobre a imagem</p>
+      </div>
+  </div>
+        
+      
     </section>
     
-    <!-- Modal de Exibição das Imagens -->
-    <div id="image-modal" class="modal">
-        <button id="close-btn" onclick="closeModal()">&times;</button>
-        <div class="modal-content">
-            <img id="modal-image" src="" alt="">
-            <button id="prev-btn" class="modal-arrow" onclick="navigateImage(-1)">&#10094;</button>
-            <button id="next-btn" class="modal-arrow" onclick="navigateImage(1)">&#10095;</button>
-        </div>
-    </div>
-
-
 
   <!-- Script JS -->
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-  <script>
-    const images = [
-      "{{ url_for('static', filename='img/agen-consu-adm.png') }}",
-      "{{ url_for('static', filename='img/agen-consu-home.png') }}",
-      "{{ url_for('static', filename='img/port-1.png') }}",
-      "{{ url_for('static', filename='img/port-home-film.png') }}",
-      "{{ url_for('static', filename='img/port-sort-film.png') }}",
-      "{{ url_for('static', filename='img/port-sugestoes-film.png') }}",
-      "{{ url_for('static', filename='img/port-admin-filmes.png') }}",
-    ];
-    let currentImageIndex = 0;
-
-    function openModal(index) {
-      currentImageIndex = index;
-      document.getElementById('modal-image').src = images[currentImageIndex];
-      document.getElementById('image-modal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('image-modal').style.display = 'none';
-    }
-
-    function navigateImage(direction) {
-      currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
-      document.getElementById('modal-image').src = images[currentImageIndex];
-    }
-  </script>
 </body>
 </html>
