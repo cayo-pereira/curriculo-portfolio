@@ -6,13 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setupMenu();
 
-    // Efeito de digitação do header (index.html)
-    if (document.querySelector('#typed-text')) {
-        new Typed('#typed-text', {
-            // ... configuração existente ...
-        });
-    }
-
     // Efeito de digitação do header (portfolio.html) - ADICIONE ESTE BLOCO
     if (document.querySelector('#typed-portfolio-header')) {
         new Typed('#typed-portfolio-header', {
