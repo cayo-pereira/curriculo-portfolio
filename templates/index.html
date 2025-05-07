@@ -26,10 +26,10 @@
       <li><a href="#experiencias">Experiências</a></li>
       <li><a href="#experiencias2">Continuação Experiências</a></li>
       <li><a href="#educacao">Educação</a></li>
-      <li><a href="/portfolio">Portfólio</a></li>
-      <li><a href="/#portfolio-sobre">Informações sobre o portfólio</a></li>
-      <li><a href="/#portfolio-sobre2">Continuação das informações</a></li>
-      <li><a href="/#portfolio-galeria">Galeria de imagens</a></li>
+      <li><a href="{{ url_for('portfolio') }}#portfolio-header">Portfólio</a></li>
+      <li><a href="{{ url_for('portfolio') }}#portfolio-sobre">Projetos em destaque</a></li>
+      <li><a href="{{ url_for('portfolio') }}#portfolio-sobre2">Detalhes dos Projetos</a></li>
+      <li><a href="{{ url_for('portfolio') }}#portfolio-galeria">Galeria de imagens</a></li>
       <li><a href="{{ url_for('static', filename='curriculo_cayo_pereira_resumido.pdf') }}" download>Baixar Currículo Resumido</a></li>
     </ul>
     <div class="social-icons">

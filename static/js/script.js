@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentIndex = 0;
         const infoTexts = [
-            'Informações sobre a imagem 1',
-            'Informações sobre a imagem 2',
-            'Informações sobre a imagem 3',
-            'Informações sobre a imagem 4',
-            'Informações sobre a imagem 5'
+            'Página de administração do sistema de agendamento de consultas.',
+            'Página inicial, para o usuário realizar o agendamento da sua consulta. O campo de horário atualiza conforme os horarios disponiveis no dia selecionado.',
+            'Página de sugestões do sistema de filmes. A página usa uma API de filmes que busca algumas informações para ajudar o usuário a escolher um filme para indicar.',
+            'Pagina de administração do sistema de filmes. Mostra todas as indicações de gênero e filme com a possibilidade de excluir caso tenha indicações erradas, assim como opções para sortear, definir quantidade de pessoas e resetar todo o sistema.',
+            'Página de indicações e resultados. Possui botão para indicar gênero ou filme, assim como mostra os resultados dos sorteios.'
         ];
 
         function showSlide(index) {
@@ -216,9 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSectionObserver('#experiencias', '#typed-experiencias', [
         'Possuo experiências de trabalho com atendimento ao cliente, '+
         'trabalho em equipe, cumprimento de prazos e até mesmo liderança.'+
-        'Também alguns trabalhos mais específicos como freelancer de design gráfico e suporte de T.I (remoto e presencial), tanto no hardware como software.'+
+        'Também trabalhos como freelancer de design gráfico e suporte de T.I (remoto e presencial), tanto no hardware como software.'+
         '<br>Abaixo minhas experiências:'+
-        '<br><br>Nuclep (2024 - Atual)<br>Estagiário em Assistência de transformação digital.<br>Manutenção de softwares internos, desenvolvimento de site em drupal e plone além de suporte ao usuário.' +
+        '<br><br>Nuclep (02/2025 - Atual)<br>Estagiário em Assistência de transformação digital.<br>Manutenção de softwares internos, desenvolvimento de site em drupal e plone além de suporte ao usuário.' +
         ' Testes de software, apoio a equipe e desenvolvimento de sistemas web em python, js, flask, html e css.<br><br>'+
         'Nuclep (2023 - 2024)<br>Estagiário em Governança de T.I.<br>Elaboração de documentos, estudos para contratação, apoio na gestão de projetos (COBIT, ITIL e metodologias ágeis).'
     ]);
@@ -244,15 +244,16 @@ document.addEventListener('DOMContentLoaded', () => {
         '• Aplicações Flask com banco de dados e APIs externas.<br>' +
         '• Sistemas de marcação com controle administrativo.<br>' +
         '• Layouts modernos, responsivos e acessíveis.'+
-        '<br><br>Também já trabalhei em projetos internos de T.I na equipe de gestão e controle, atualizando catalogo de serviços, estruturando projetos e auxiliando na elaboração do planejamento estratégico do setor.'
+        '<br><br>Também já trabalhei em projetos internos de T.I na equipe de gestão de projetos, atualizando catalogo de serviços, estruturando projetos e auxiliando na elaboração do planejamento estratégico do setor.'
     ]);
 
     setupSectionObserver('#portfolio-sobre2', '#typed-portsobre2', [
-        'Nos projetos você vai encontrar:<br><br>• Um projeto de desenvolvimento do site institucional da empresa, desenvolvido em drupal e seguindo as normas vigentes. Esse projeto me ensinou muito sobre trabalho em equipe e atenção aos detalhes. link: https://www.nuclep.gov.br'+
+        'Nos projetos você vai encontrar:<br><br>'+
+        '• O site atual, feito para ser o meu curriculo web.<br>'+
+        '• Um projeto de desenvolvimento do site institucional da empresa que fui estágiario, desenvolvido em drupal e seguindo as normas vigentes. Esse projeto me ensinou muito sobre trabalho em equipe e atenção aos detalhes.'+
         '<br>  (Uma observação importante é que eu também participei do desenvolvimento do antigo site em drupal, porém o site não existe mais.)'+
         '<br>• Um projeto de indicação de gêneros, títulos de filmes e sorteio utilizando a API do TMDB para uma página de sugestões.'+
         '<br>• Um projeto de agendamento de consultas que utiliza um banco de dados local com uma pagina adm para controle que inclui exclusão das consultas, login e filtro.'+
-        '<br>• O site atual, feito para ser o meu curriculo web.'+
         '<br><br>Gostarei muito de explicar com mais detalhes via e-mail, reunião ou qualquer outro meio de contato pessoal que estão presentes no menu lateral, aguardo seu contato.'
     ]);
 
