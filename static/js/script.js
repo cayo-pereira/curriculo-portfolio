@@ -402,3 +402,4 @@ window.addEventListener('resize', function() {
         modal.style.justifyContent = 'center';
     }
 });
+
