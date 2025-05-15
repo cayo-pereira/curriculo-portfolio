@@ -109,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentIndex = 0;
         const infoTexts = [
-            'Página de administração do sistema de agendamento de consultas.',
+            'Página de administração do sistema de agendamento de consultas.<br>Botão para logout do admin, botão para exportar agendamentos já configurado para tabela em .xlsx, campo de busca por nome, data, e botões para excluir agendamentos.',
             'Página inicial, para o usuário realizar o agendamento da sua consulta. O campo de horário atualiza conforme os horarios disponiveis no dia selecionado.',
             'Página de sugestões do sistema de filmes. A página usa uma API de filmes que busca algumas informações para ajudar o usuário a escolher um filme para indicar.',
-            'Pagina de administração do sistema de filmes. Mostra todas as indicações de gênero e filme com a possibilidade de excluir caso tenha indicações erradas, assim como opções para sortear, definir quantidade de pessoas e resetar todo o sistema.',
+            'Página de administração do sistema de filmes. Mostra todas as indicações de gênero e filme com a possibilidade de excluir caso tenha indicações erradas, assim como opções para sortear, definir quantidade de pessoas e resetar todo o sistema.',
             'Página de indicações e resultados. Possui botão para indicar gênero ou filme, assim como mostra os resultados dos sorteios.'
         ];
 
