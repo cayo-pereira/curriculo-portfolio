@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('#typed-text')) {
         try {
             new Typed('#typed-text', {
-                strings: [' print("Hello World") <br> Sejam bem vindos ao meu currículo e portfolio web.'],
+                strings: [' Sejam bem vindos ao meu currículo e portfolio web.'],
                 typeSpeed: 30,
                 backSpeed: 40,
                 startDelay: 300,
