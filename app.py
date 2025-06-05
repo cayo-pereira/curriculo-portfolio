@@ -5,12 +5,10 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-# Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
 
 app = Flask(__name__)
-# É uma boa prática carregar a secret_key do .env também.
-# Se FLASK_SECRET_KEY não estiver no .env, usará 'supersecretkey_fallback'.
+
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey_fallback')
 app.config['UPLOAD_FOLDER_RELATIVE_TO_STATIC'] = os.path.join('img', 'uploads')
 app.config['UPLOAD_FOLDER_PHYSICAL'] = os.path.join(app.root_path, 'static', 'img', 'uploads')
@@ -19,18 +17,14 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 DATA_FILE = 'data.json'
 
 def load_data():
-    """Carrega os dados do arquivo JSON ou cria um novo com dados padrão."""
     if not os.path.exists(DATA_FILE):
-        # Busca o nome de usuário e a senha do administrador das variáveis de ambiente.
-        # Usa 'admin' e 'admin123' como fallback se não estiverem no .env,
-        # mantendo o comportamento que você tinha anteriormente.
         admin_username_initial = os.getenv('ADMIN_USERNAME', 'admin')
-        admin_password_initial = os.getenv('ADMIN_PASSWORD', 'admin123') # Senha em texto plano do .env ou fallback
+        admin_password_initial = os.getenv('ADMIN_PASSWORD', 'admin123')
 
         default_data = {
             "credentials": {
-                "username": admin_username_initial, # Usuário do .env ou fallback
-                "password": generate_password_hash(admin_password_initial) # Hash da senha do .env ou fallback
+                "username": admin_username_initial,
+                "password": generate_password_hash(admin_password_initial)
             },
             "index_content": {
                 "header_typed_text": ["Sejam bem vindos ao meu currículo e portfolio web."],
@@ -52,7 +46,7 @@ def load_data():
                 "sobre2_titulo": "Detalhes dos projetos",
                 "sobre2_texto": "Nos projetos você vai encontrar:<br><br>• O site atual...",
                 "galeria_titulo": "Galeria de imagens",
-                "gallery_images": [] # Começa com galeria vazia
+                "gallery_images": []
             }
         }
         save_data(default_data)
@@ -66,17 +60,15 @@ def load_data():
             try:
                 os.rename(DATA_FILE, DATA_FILE + ".corrupted." + str(os.path.getmtime(DATA_FILE)))
             except OSError:
-                pass # Não conseguiu renomear, vai sobrescrever na próxima chamada a load_data
-        return load_data() # Chama novamente para criar o padrão
+                pass
+        return load_data()
 
 
 def save_data(data):
-    """Salva os dados no arquivo JSON."""
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def allowed_file(filename):
-    """Verifica se a extensão do arquivo é permitida."""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
@@ -109,8 +101,8 @@ def login():
         return redirect(url_for('admin_dashboard'))
     
     if request.method == 'POST':
-        username_form = request.form['username'] # Renomeado para evitar conflito com nome de variável de ambiente
-        password_form = request.form['password'] # Renomeado para evitar conflito
+        username_form = request.form['username']
+        password_form = request.form['password']
         data = load_data()
         admin_user = data.get('credentials', {})
 
@@ -162,9 +154,7 @@ def admin_update_texts():
 
     data = load_data()
     
-    # Atualização do conteúdo da página Index
     index_content = data.get('index_content', {})
-    # Campos da página Index (Currículo)
     index_fields_to_update = [
         'index_header_typed_text', 'index_sobre_titulo', 'index_sobre_texto',
         'index_competencias_titulo', 'index_competencias_texto_html',
@@ -173,25 +163,21 @@ def admin_update_texts():
         'index_educacao_titulo', 'index_educacao_texto'
     ]
     for field_key_form in index_fields_to_update:
-        # Remove "index_" para obter a chave no JSON (ex: 'index_sobre_titulo' no form -> 'sobre_titulo' no JSON)
         json_key = field_key_form.replace('index_', '')
-        if field_key_form == 'index_header_typed_text': # Tratamento especial para texto do cabeçalho
+        if field_key_form == 'index_header_typed_text':
              index_content[json_key] = [request.form.get(field_key_form, '').strip()]
         else:
             index_content[json_key] = request.form.get(field_key_form, index_content.get(json_key))
     data['index_content'] = index_content
 
-    # Atualização do conteúdo da página Portfólio
     portfolio_content = data.get('portfolio_content', {})
-    # Campos da página Portfólio
     portfolio_fields_to_update = [
         'portfolio_header_typed_text', 'portfolio_sobre_titulo', 'portfolio_sobre_texto',
         'portfolio_sobre2_titulo', 'portfolio_sobre2_texto', 'portfolio_galeria_titulo'
     ]
     for field_key_form in portfolio_fields_to_update:
-        # Remove "portfolio_" para obter a chave no JSON
         json_key = field_key_form.replace('portfolio_', '')
-        if field_key_form == 'portfolio_header_typed_text': # Tratamento especial
+        if field_key_form == 'portfolio_header_typed_text':
             portfolio_content[json_key] = [request.form.get(field_key_form, '').strip()]
         else:
             portfolio_content[json_key] = request.form.get(field_key_form, portfolio_content.get(json_key))
@@ -218,8 +204,8 @@ def admin_upload_image():
         return redirect(url_for('admin_dashboard'))
 
     if file and allowed_file(file.filename):
-        original_filename_secure = secure_filename(file.filename) # Guarda o nome original seguro
-        filename_to_save = original_filename_secure # Começa com o nome original
+        original_filename_secure = secure_filename(file.filename)
+        filename_to_save = original_filename_secure
         
         upload_dir_physical = app.config['UPLOAD_FOLDER_PHYSICAL']
         if not os.path.exists(upload_dir_physical):
@@ -227,7 +213,6 @@ def admin_upload_image():
             
         file_path_physical = os.path.join(upload_dir_physical, filename_to_save)
         
-        # Lógica para evitar sobrescrever arquivos com o mesmo nome
         base, ext = os.path.splitext(original_filename_secure)
         counter = 1
         while os.path.exists(file_path_physical):
@@ -240,8 +225,8 @@ def admin_upload_image():
         data = load_data()
         gallery_images = data.get('portfolio_content', {}).get('gallery_images', [])
         gallery_images.append({
-            "filename": filename_to_save, # Salva o nome final do arquivo (com sufixo, se houver)
-            "original_filename": original_filename_secure, # Mantém o nome original para referência (opcional)
+            "filename": filename_to_save,
+            "original_filename": original_filename_secure,
             "info": image_info
         })
         data['portfolio_content']['gallery_images'] = gallery_images
@@ -262,7 +247,7 @@ def admin_remove_image(filename_to_remove):
     
     image_found = False
     new_gallery_images = []
-    removed_image_filename = None # Para o log
+    removed_image_filename = None
     for img in gallery_images:
         if img['filename'] == filename_to_remove:
             image_found = True
@@ -272,7 +257,6 @@ def admin_remove_image(filename_to_remove):
                 if os.path.exists(physical_file_path):
                     os.remove(physical_file_path)
                 else:
-                    # Mesmo que o arquivo físico não seja encontrado, removemos a referência do JSON
                     flash(f"Arquivo físico '{removed_image_filename}' não encontrado no servidor, mas a referência será removida.", 'warning')
             except OSError as e:
                 flash(f"Erro ao remover o arquivo físico '{removed_image_filename}': {e}. A referência ainda será removida.", 'danger')
@@ -321,9 +305,8 @@ def admin_update_password():
 
 
 if __name__ == '__main__':
-    # Cria o diretório de uploads físico se não existir ao iniciar o app
     if not os.path.exists(app.config['UPLOAD_FOLDER_PHYSICAL']):
         os.makedirs(app.config['UPLOAD_FOLDER_PHYSICAL'])
     
-    load_data() # Garante que data.json seja criado/carregado na inicialização
+    load_data()
     app.run(debug=True)
