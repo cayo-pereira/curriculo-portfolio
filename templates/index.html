@@ -41,8 +41,7 @@
   </div>
 
   <header id="header">
-    <h1><span id="typed-text"></span></h1>
-  
+    <h1><span id="typed-text" data-text="{{ content.header_typed_text | join('|') if content.header_typed_text is iterable and content.header_typed_text is not string else content.header_typed_text }}"></span></h1>
     <a href="#sobre" class="scroll-down-btn" aria-label="Ir para seção Sobre">
       <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
         <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -59,9 +58,9 @@
         </svg>
       </a>      
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Meu nome é Cayo Pereira</h2>
+        <h2 class="sobre-titulo">{{ content.sobre_titulo | default('Meu nome é Cayo Pereira') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-sobre"></span>
+          <span id="typed-sobre" data-text="{{ content.sobre_texto | default('') }}"></span>
         </div>
       </div>
     </section>
@@ -73,9 +72,9 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Competências</h2>
+        <h2 class="sobre-titulo">{{ content.competencias_titulo | default('Competências') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-competencias"></span>
+          <span id="typed-competencias" data-text="{{ content.competencias_texto_html | default('') | e }}"></span>
         </div>
       </div>
     </section>
@@ -87,14 +86,13 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Experiências</h2>
+        <h2 class="sobre-titulo">{{ content.experiencias_titulo | default('Experiências') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-experiencias"></span>
+          <span id="typed-experiencias" data-text="{{ content.experiencias_texto | default('') }}"></span>
         </div>
       </div>
     </section>
 
-    <!-- EXPERIÊNCIAS 2 -->
     <section id="experiencias2">
       <a href="#educacao" class="scroll-down-btn" aria-label="Ir para a seção educação">
         <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
@@ -102,13 +100,13 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Continuação das Experiências</h2>
+        <h2 class="sobre-titulo">{{ content.experiencias2_titulo | default('Continuação das Experiências') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-experiencias2"></span>
+          <span id="typed-experiencias2" data-text="{{ content.experiencias2_texto | default('') }}"></span>
+        </div>
       </div>
     </section>
 
-    <!-- EDUCAÇÃO -->
     <section id="educacao">
       <a href="#header" class="scroll-down-btn" aria-label="Ir para o inicio">
         <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
@@ -116,14 +114,24 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Educação</h2>
+        <h2 class="sobre-titulo">{{ content.educacao_titulo | default('Educação') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-educacao"></span>
+          <span id="typed-educacao" data-text="{{ content.educacao_texto | default('') }}"></span>
+        </div>
       </div>
     </section>
-
   </main> 
 
+  <script>
+    window.typedTexts = {
+      'typed-text': {{ content.header_typed_text | tojson | safe }},
+      'typed-sobre': {{ [content.sobre_texto] | tojson | safe }},
+      'typed-competencias': {{ [content.competencias_texto_html] | tojson | safe }},
+      'typed-experiencias': {{ [content.experiencias_texto] | tojson | safe }},
+      'typed-experiencias2': {{ [content.experiencias2_texto] | tojson | safe }},
+      'typed-educacao': {{ [content.educacao_texto] | tojson | safe }}
+    };
+  </script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

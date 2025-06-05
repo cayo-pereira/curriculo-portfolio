@@ -8,7 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 </head>
 <body>
-  <!-- Menu Toggle (idêntico ao index.html) -->
   <div id="menu-toggle" aria-label="Abrir menu lateral" role="button" tabindex="0">
     <div class="menu-icon">
       <span></span>
@@ -17,22 +16,20 @@
     </div>
   </div>
 
-  <!-- Overlay (idêntico ao index.html) -->
   <div id="menu-overlay"></div>
 
-  <!-- Sidebar (idêntico ao index.html com ajuste de links) -->
   <div id="sidebar">
     <ul class="menu-links">
       <li><a href="#portfolio-header">Início</a></li>
       <li><a href="#portfolio-sobre">Projetos em destaque</a></li>
       <li><a href="#portfolio-sobre2">Detalhes dos Projetos</a></li>
       <li><a href="#portfolio-galeria">Galeria de imagens</a></li>
-      <li><a href="/#header">Início do currículo</a></li>
-      <li><a href="/#sobre">Sobre Cayo</a></li>
-      <li><a href="/#competencias">Competências</a></li>
-      <li><a href="/#experiencias">Experiências</a></li>
-      <li><a href="/#experiencias2">Continuação Experiências</a></li>
-      <li><a href="/#educacao">Educação</a></li>
+      <li><a href="{{ url_for('home') }}#header">Início do currículo</a></li>
+      <li><a href="{{ url_for('home') }}#sobre">Sobre Cayo</a></li>
+      <li><a href="{{ url_for('home') }}#competencias">Competências</a></li>
+      <li><a href="{{ url_for('home') }}#experiencias">Experiências</a></li>
+      <li><a href="{{ url_for('home') }}#experiencias2">Continuação Experiências</a></li>
+      <li><a href="{{ url_for('home') }}#educacao">Educação</a></li>
       <li>
         <a href="{{ url_for('static', filename='curriculo_cayo_pereira_resumido.pdf') }}" download>
           Baixar Currículo Resumido
@@ -56,7 +53,7 @@
   </div>
 
   <header id="portfolio-header">
-    <h1><span id="typed-portfolio-header"></span></h1>
+    <h1><span id="typed-portfolio-header" data-text="{{ content.header_typed_text | join('|') if content.header_typed_text is iterable and content.header_typed_text is not string else content.header_typed_text }}"></span></h1>
     <a href="#portfolio-sobre" class="scroll-down-btn" aria-label="Ir para o portfolio">
         <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
             <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -65,7 +62,6 @@
 </header>
 
   <main>
-
     <section id="portfolio-sobre">
       <a href="#portfolio-sobre2" class="scroll-down-btn" aria-label="Ir para a continuação">
         <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#00ff7f">
@@ -73,9 +69,10 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Projetos em destaque</h2>
+        <h2 class="sobre-titulo">{{ content.sobre_titulo | default('Projetos em destaque') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-portsobre"></span>
+          <span id="typed-portsobre" data-text="{{ content.sobre_texto | default('') }}"></span>
+        </div>
       </div>
     </section>
 
@@ -86,9 +83,10 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Detalhes dos projetos</h2>
+        <h2 class="sobre-titulo">{{ content.sobre2_titulo | default('Detalhes dos projetos') }}</h2>
         <div class="sobre-texto">
-          <span id="typed-portsobre2"></span>
+          <span id="typed-portsobre2" data-text="{{ content.sobre2_texto | default('') }}"></span>
+        </div>
       </div>
     </section>
 
@@ -99,42 +97,58 @@
         </svg>
       </a>
       <div class="sobre-container">
-        <h2 class="sobre-titulo">Galeria de imagens</h2>
+        <h2 class="sobre-titulo">{{ content.galeria_titulo | default('Galeria de imagens') }}</h2>
+      </div>
+
+      {% if content.gallery_images_processed %}
+      <div class="carousel-container">
+        <button class="carousel-arrow prev" aria-label="Imagem anterior">❮</button>
+        <button class="carousel-arrow next" aria-label="Próxima imagem">❯</button>
+        <div class="carousel">
+          {% for image in content.gallery_images_processed %}
+            <img src="{{ image.src }}" alt="{{ image.alt }}" class="carousel-item {% if loop.first %}active{% endif %}" data-info="{{ image.info | e }}">
+          {% endfor %}
         </div>
-
-    <div class="carousel-container">
-      <button class="carousel-arrow prev" aria-label="Imagem anterior">❮</button>
-      <button class="carousel-arrow next" aria-label="Próxima imagem">❯</button>
-      <div class="carousel">
-        <!-- Imagens do carrossel -->
-        <img src="{{ url_for('static', filename='img/agen-consu-adm.png') }}" alt="Imagem 1" class="carousel-item active">
-        <img src="{{ url_for('static', filename='img/agen-consu-home.png') }}" alt="Imagem 2" class="carousel-item">
-        <img src="{{ url_for('static', filename='img/port-sugestoes-film.png') }}" alt="Imagem 3" class="carousel-item">
-        <img src="{{ url_for('static', filename='img/port-admin-filmes.png') }}" alt="Imagem 4" class="carousel-item">
-        <img src="{{ url_for('static', filename='img/port-sort-film.png') }}" alt="Imagem 5" class="carousel-item">
+          
+        <div class="carousel-dots">
+          {% for image in content.gallery_images_processed %}
+            <span class="dot {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}"></span>
+          {% endfor %}
+        </div>
+        
+        <div class="carousel-info-display">
+          <p id="carousel-info-text-display">{{ content.gallery_images_processed[0].info | replace('\r\n', '<br>') | replace('\n', '<br>') | safe if content.gallery_images_processed else 'Informações sobre a imagem' }}</p>
+        </div>
       </div>
-        
-        
-      <!-- Bolinhas de navegação -->
-      <div class="carousel-dots">
-        <span class="dot active" data-index="0"></span>
-        <span class="dot" data-index="1"></span>
-        <span class="dot" data-index="2"></span>
-        <span class="dot" data-index="3"></span>
-        <span class="dot" data-index="4"></span>
+      {% else %}
+      <div class="sobre-container">
+        <p style="text-align: center;">Nenhuma imagem na galeria no momento.</p>
       </div>
-        
-      <!-- Barra de informações -->
-      <div class="carousel-info">
-        <p id="carousel-info-text">Informações sobre a imagem</p>
-      </div>
-  </div>
-        
-      
+      {% endif %}
     </section>
-    
+  </main> 
 
-  <!-- Script JS -->
+  <div id="image-modal-overlay" class="image-modal-overlay">
+    <span class="image-modal-close" aria-label="Fechar modal">&times;</span>
+    <div class="image-modal-content-wrapper">
+      <img class="image-modal-content" id="expanded-image-src" alt="Imagem expandida">
+      <div id="image-modal-caption" class="image-modal-caption"></div>
+    </div>
+  </div>
+
+  <script>
+    window.typedPortfolioTexts = {
+      'typed-portfolio-header': {{ content.header_typed_text | tojson | safe }},
+      'typed-portsobre': {{ [content.sobre_texto] | tojson | safe }},
+      'typed-portsobre2': {{ [content.sobre2_texto] | tojson | safe }}
+    };
+
+    window.galleryImageInfos = [
+      {% for image in content.gallery_images_processed %}
+        {{ image.info | replace('\r\n', '<br>') | replace('\n', '<br>') | tojson | safe }}{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+  </script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>

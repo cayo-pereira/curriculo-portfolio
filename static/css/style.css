@@ -1,4 +1,3 @@
-/* style.css */
 *,
 *::before,
 *::after {
@@ -15,6 +14,10 @@ html, body {
     overflow-x: hidden;
     scroll-snap-type: y proximity;
     scroll-behavior: smooth;
+}
+
+body.modal-open {
+    overflow: hidden;
 }
 
 header {
@@ -77,8 +80,6 @@ header {
     align-items: center;
     flex-direction: column;
     opacity: 0;
-    transition: opacity 0.3s ease;
-    scroll-snap-align: none;
     transform: translateY(-20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -263,7 +264,7 @@ section p {
 
 #typed-competencias .competencias-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colunas fixas */
+    grid-template-columns: repeat(4, 1fr); 
     gap: 12px;
     width: 100%;
     max-width: 1200px;
@@ -291,12 +292,11 @@ section p {
     padding-left: 15px;
 }
 
-/* Carrossel */
 .carousel-container {
     position: relative;
     width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
+    max-width: 900px;
+    margin: 30px auto 0;
     height: auto;
     min-height: 300px;
 }
@@ -304,8 +304,13 @@ section p {
 .carousel {
     position: relative;
     width: 100%;
-    height: 60vh;
+    height: 55vh;
+    min-height: 300px;
+    max-height: 600px;
     overflow: hidden;
+    background-color: #101010;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
   
 .carousel-item {
@@ -316,84 +321,182 @@ section p {
     max-width: 100%;
     max-height: 100%;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s ease-in-out;
     object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 4px;
+    pointer-events: none;
 }
   
 .carousel-item.active {
     opacity: 1;
+    pointer-events: auto;
 }
   
 .carousel-dots {
-    position: absolute;
-    bottom: 20px;
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
     gap: 10px;
-    z-index: 10;
+    z-index: 15;
+    margin-top: 15px;
+    padding: 5px 0;
 }
   
 .dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.3s;
 }
   
+.dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+}
+
 .dot.active {
     background: #00ff7f;
+    transform: scale(1.2);
 }
   
-.carousel-info {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    right: 0;
+.carousel-info-display {
     text-align: center;
-    color: white;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    z-index: 5;
+    color: #ccc;
+    background-color: rgba(16, 16, 16, 0.7);
+    padding: 15px 20px;
+    margin-top: 15px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 60px;
     overflow-wrap: break-word;
+    border: 1px solid #282828;
+}
+
+#carousel-info-text-display br {
+    display: block;
+    content: "";
+    margin-top: 0.5em;
 }
 
 .carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #00ff7f;
     border: none;
     border-radius: 50%;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
-}
-
-.carousel-arrow.prev {
-    left: 15px;
-}
-
-.carousel-arrow.next {
-    right: 15px;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
 .carousel-arrow:hover {
-    background: rgba(0, 255, 127, 0.8);
+    background: #00ff7f;
+    color: #101010;
+    transform: translateY(-50%) scale(1.1);
 }
 
-/* ==================== */
-/* RESPONSIVIDADE */
-/* ==================== */
+.carousel-arrow.prev {
+    left: 10px;
+}
+
+.carousel-arrow.next {
+    right: 10px;
+}
+
+
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.92);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.image-modal-overlay.visible {
+    display: flex;
+    opacity: 1;
+}
+
+.image-modal-content-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 95%;
+    max-height: 95%;
+}
+
+.image-modal-content {
+    max-width: 100%;
+    max-height: calc(95vh - 100px);
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 5px 25px rgba(0,255,127,0.1);
+}
+
+.image-modal-caption {
+    color: #e0e0e0;
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    overflow-y: auto;
+    max-height: 80px;
+    background-color: rgba(20, 20, 20, 0.5);
+    border-radius: 4px;
+}
+.image-modal-caption br {
+    display: block;
+    content: "";
+    margin-top: 0.5em;
+}
+
+
+.image-modal-close {
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    line-height: 1;
+    transition: color 0.3s, transform 0.3s, background-color 0.3s;
+    z-index: 2001;
+}
+
+.image-modal-close:hover {
+    color: #00ff7f;
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0.6);
+}
 
 @media (max-width: 1024px) {
     header {
@@ -411,6 +514,9 @@ section p {
     
     .menu-links a {
         font-size: 22px;
+    }
+    .carousel {
+        height: 50vh;
     }
 }
 
@@ -443,18 +549,34 @@ section p {
     }
     
     .carousel {
-        height: 50vh;
+        height: 45vh;
     }
     
-    .carousel-info {
-        position: static;
-        margin-top: 10px;
+    .carousel-info-display {
+        font-size: 0.9rem;
+        padding: 10px 15px;
     }
-    
-    .carousel-dots {
-        position: relative;
-        bottom: auto;
-        margin: 15px 0;
+
+    .carousel-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    .carousel-arrow.prev { left: 5px; }
+    .carousel-arrow.next { right: 5px; }
+
+    .image-modal-content {
+        max-height: calc(90vh - 80px);
+    }
+    .image-modal-caption {
+        font-size: 0.9rem;
+        max-height: 70px;
+    }
+    .image-modal-close {
+        font-size: 30px;
+        top: 5px;
+        right: 10px;
+        padding: 2px 7px;
     }
 }
 
@@ -481,7 +603,7 @@ section p {
     }
     
     .carousel {
-        height: 40vh;
+        height: 35vh;
     }
     
     .carousel-arrow {
@@ -489,56 +611,121 @@ section p {
         height: 30px;
         font-size: 16px;
     }
+    .carousel-info-display {
+        font-size: 0.85rem;
+    }
 }
 
-/* Estilo para a imagem expandida (mobile) */
-@media (max-width: 768px) {
-    .mobile-expanded-view {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9);
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        touch-action: pan-y pinch-zoom;
-    }
-    
-    .mobile-expanded-img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-    
-    .close-expanded-view {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        color: white;
-        background: rgba(0, 0, 0, 0.5);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        z-index: 1001;
-    }
-}
-/* --- Competências: Garante 4 colunas no desktop --- */
 @media (min-width: 992px) {
   #typed-competencias .competencias-grid {
-      grid-template-columns: repeat(4, 1fr); /* Força 4 colunas */
+      grid-template-columns: repeat(4, 1fr); 
   }
 }
 
 /* --- Competências: Ajuste para mobile (1 coluna) --- */
 @media (max-width: 480px) {
   #typed-competencias .competencias-grid {
-      grid-template-columns: 1fr; /* 1 coluna no mobile */
+      grid-template-columns: 1fr; 
   }
 }
+
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0; 
+}
+
+.flash-messages li {
+    padding: 12px 18px; 
+    border-radius: 5px;
+    margin-bottom: 12px; 
+    font-size: 0.95rem;
+    border: 1px solid transparent; 
+    text-align: left; 
+    line-height: 1.5;
+}
+
+.flash-messages .success {
+    background-color: rgba(0, 255, 127, 0.1); 
+    border-color: rgba(0, 255, 127, 0.3);
+    color: #00ff7f; 
+}
+
+.flash-messages .danger {
+    background-color: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.3);
+    color: #ff4d4d; 
+}
+
+.flash-messages .info {
+    background-color: rgba(77, 166, 255, 0.1);
+    border-color: rgba(77, 166, 255, 0.3);
+    color: #4da6ff; 
+}
+
+.flash-messages .warning {
+    background-color: rgba(255, 178, 46, 0.1); 
+    border-color: rgba(255, 178, 46, 0.3);
+    color: #ffb22e; 
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #00ff7f;
+  border-radius: 10px;
+  border: 3px solid #1f1f1f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00e673;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #00ff7f #1f1f1f;
+}
+
+.form-group input[type="file"] {
+    color: transparent;
+}
+
+.form-group input[type="file"]::file-selector-button {
+  background-color: #00ff7f;
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button {
+  background-color: #00ff7f;
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-group input[type="file"]::file-selector-button:hover,
+.form-group input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #00e673;

@@ -1,0 +1,53 @@
+{
+  "credentials": {
+    "username": "choraomps",
+    "password": "scrypt:32768:8:1$r2xKIdWkCOTopt78$ec9cf65706b4fb5cd44d859d4dfdd04222842f25139d980575ee6fec30b02a0849e94532ae0abf0ca2d46e043e711cea2b2770ca671fcd7031e178ad961e4975"
+  },
+  "index_content": {
+    "header_typed_text": [
+      "Sejam bem vindos ao meu currículo e portfolio web."
+    ],
+    "sobre_titulo": "Meu nome é Cayo Pereira",
+    "sobre_texto": "Atualmente tenho 27 anos, resido em Nilópolis/RJ, estou no ultimo período do curso de engenharia da computação e estou buscando experiências novas no setor de T.I. Procuro vagas como Trainee ou analista, em áreas como desenvolvimento de sistemas, analise de dados, gestão de projetos, governança de T.I.",
+    "competencias_titulo": "Competências",
+    "competencias_texto_html": "<div class=\"competencias-grid\"><div>• Pacote Office<br>• Pacote Adobe<br>• Inglês<br>• Scrum<br>• COBIT<br>• ITIL</div>\r\n<div>• HTML<br>• CSS<br>• Plone<br>• Drupal<br>• Gestão de projetos<br>• Python</div>\r\n<div>• Power BI<br>• Benner<br>• JIRA<br>• Lógica<br>• Resolução de problemas<br>• Organização</div>\r\n<div>• Comunicação<br>• Trabalho em equipe<br>• Planejamento<br>• Resiliência<br>• Atendimento ao cliente</div>\r\n</div>",
+    "experiencias_titulo": "Experiências",
+    "experiencias_texto": "Possuo experiências de trabalho com atendimento ao cliente, trabalho em equipe, cumprimento de prazos e até mesmo liderança.Também trabalhos como freelancer de design gráfico e suporte de T.I (remoto e presencial), tanto no hardware como software.\r\nAbaixo minhas experiências:<br><br>\r\n\r\nNuclep (02/2025 - Atual)<br>\r\nEstagiário em Assistência de transformação digital.<br>\r\nManutenção de softwares internos, desenvolvimento de site em drupal e plone além de suporte ao usuário. Testes de software, apoio a equipe e desenvolvimento de sistemas web em python, js, flask, html e css.<br><br>\r\n\r\nNuclep (2023 - 2024)<br>\r\nEstagiário em Governança de T.I.<br>\r\nElaboração de documentos, estudos para contratação, apoio na gestão de projetos (COBIT, ITIL e metodologias ágeis).",
+    "experiencias2_titulo": "Continuação das Experiências",
+    "experiencias2_texto": "Autônomo (2020 - Atual)<br>\r\nSuporte técnico para computadores.<br>\r\nMontagem e manutenção de computadores, limpeza, formação e consultoria.<br><br>\r\n\r\nAutônomo (2021 - 2023)<br>\r\nFreelancer Design Gráfico.<br>\r\nLogotipo e identidade de marca, posts personalizados de redes sociais e divulgações de eventos como flyers.<br><br>\r\n\r\nESPRO (Ensino Social Profissionalizante) (2018 - 2019)<br>\r\nJovem Aprendiz<br>\r\nAtendimento ao cliente e trabalho em equipe.",
+    "educacao_titulo": "Educação",
+    "educacao_texto": "Minha formação educacional:<br><br>\r\n\r\nBacharel em Engenharia da Computação<br>\r\nUniversidade Cândido Mendes (07/2021 - 07/2025).<br><br>\r\n\r\nCursos complementares:<br>\r\n• Microsoft Security, Compliance, and Identity Fundamentals, Tecnologia da Informação (Microsoft).<br>\r\n• Fundamentos da Lei Geral de Proteção de Dados (Enap).<br>\r\n• Uso do Lean e Inception na Administração Pública (Enap).<br>\r\n• Scrum no Contexto do Serviço Público (Enap).<br>\r\n• Jira e Confluence (Canal Valor).<br>\r\n• Curso Design Gráfico Completo 10 Cursos do Zero ao Avançado (Udemy).<br><br>\r\n\r\nClique no menu lateral para acessar meu portfólio ou entrar em contato."
+  },
+  "portfolio_content": {
+    "header_typed_text": [
+      "Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos."
+    ],
+    "sobre_titulo": "Projetos em destaque",
+    "sobre_texto": "Aqui estão alguns dos projetos que desenvolvi com dedicação e criatividade. Eles representam minha jornada, aprendizado e habilidades práticas em design, desenvolvimento de scripts em IA e desenvolvimento web, incluindo:<br><br>\r\n\r\n• Aplicações Flask com banco de dados e APIs externas.<br>\r\n• Sistemas de marcação com controle administrativo.<br>\r\n• Layouts modernos, responsivos e acessíveis.<br><br>\r\n\r\nTambém já trabalhei em projetos internos de T.I na equipe de gestão de projetos, atualizando catalogo de serviços, estruturando projetos e auxiliando na elaboração do planejamento estratégico do setor.",
+    "sobre2_titulo": "Detalhes dos projetos",
+    "sobre2_texto": "Nos projetos você vai encontrar:<br><br>\r\n\r\n• O site atual, feito para ser o meu curriculo web.<br>\r\n• Um projeto de desenvolvimento do site institucional da empresa que fui estágiario, desenvolvido em drupal e seguindo as normas vigentes. Esse projeto me ensinou muito sobre trabalho em equipe e atenção aos detalhes.<br>\r\n(Uma observação importante é que eu também participei do desenvolvimento do antigo site em drupal, porém o site não existe mais.)<br>\r\n• Um projeto de indicação de gêneros, títulos de filmes e sorteio utilizando a API do TMDB para uma página de sugestões.<br>\r\n• Um projeto de agendamento de consultas que utiliza um banco de dados local com uma pagina adm para controle que inclui exclusão das consultas, login e filtro.<br><br>\r\n\r\nGostarei muito de explicar com mais detalhes via e-mail, reunião ou qualquer outro meio de contato pessoal que estão presentes no menu lateral, aguardo seu contato.",
+    "galeria_titulo": "Galeria de imagens",
+    "gallery_images": [
+      {
+        "filename": "port-admin-filmes.png",
+        "original_filename": "port-admin-filmes.png",
+        "info": "Tela de administração do sistema de sorteio de filmes mostrando as funções do administrador."
+      },
+      {
+        "filename": "port-home-film.png",
+        "original_filename": "port-home-film.png",
+        "info": "Página inicial do sistema de sorteio de filmes."
+      },
+      {
+        "filename": "port-sort-film.png",
+        "original_filename": "port-sort-film.png",
+        "info": "Página dos resultados do sistema de sorteio de filmes e os caminhos para indicações."
+      },
+      {
+        "filename": "port-sugestoes-film.png",
+        "original_filename": "port-sugestoes-film.png",
+        "info": "Página de sugestões do sistema de sorteio de filmes utilizando uma API para buscar as capas, títulos e sinopses dos filmes em pt/br."
+      }
+    ]
+  }
+}

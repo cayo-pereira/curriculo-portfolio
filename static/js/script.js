@@ -1,51 +1,59 @@
-console.log('Carregou o script do carrossel');
+console.log('Carregou o script.js modificado');
 
-// Verificação inicial do Typed.js
 if (typeof Typed === 'undefined') {
     console.error('Atenção: Typed.js não foi carregado corretamente!');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Efeito de digitação do header (portfolio.html)
-    if (document.querySelector('#typed-portfolio-header')) {
+    function initTyped(elementSelector, sourceObject, key, options = {}) {
+        const element = document.querySelector(elementSelector);
+        if (!element) return;
+
+        let stringsToType = [];
+        if (sourceObject && sourceObject[key]) {
+            stringsToType = Array.isArray(sourceObject[key]) ? sourceObject[key] : [sourceObject[key]];
+        } else {
+            const dataText = element.getAttribute('data-text');
+            if (dataText) {
+                stringsToType = [dataText];
+            } else {
+                console.warn(`Nenhuma string encontrada para ${elementSelector} em ${sourceObject ? 'sourceObject' : 'data-text'}`);
+                element.innerHTML = element.getAttribute('data-text') || "";
+                return;
+            }
+        }
+
+        if (typeof Typed === 'undefined') {
+            element.innerHTML = stringsToType.join('<br>');
+            return;
+        }
+
         try {
-            new Typed('#typed-portfolio-header', {
-                strings: ['Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos.'],
-                typeSpeed: 20,
-                backSpeed: 30,
+            new Typed(elementSelector, {
+                strings: stringsToType,
+                typeSpeed: options.typeSpeed || 30,
+                backSpeed: options.backSpeed || 30,
                 startDelay: 300,
-                showCursor: true,
+                showCursor: options.showCursor !== false,
                 cursorChar: '|',
                 loop: false,
-                contentType: 'html',
+                contentType: options.contentType || 'html',
                 onBegin: (self) => self.el.innerHTML = '',
-                preStringTyped: (pos, self) => self.el.innerHTML = ''
+                preStringTyped: (pos, self) => self.el.innerHTML = '',
+                ...options
             });
         } catch (e) {
-            console.error('Erro no Typed.js (header):', e);
-            document.querySelector('#typed-portfolio-header').innerHTML = 
-                'Portfólio de Cayo Pereira<br>Confira meus principais projetos e trabalhos.';
+            console.error(`Erro no Typed.js (${elementSelector}):`, e);
+            element.innerHTML = stringsToType.join('<br>');
         }
     }
-    if (document.querySelector('#typed-text')) {
-        try {
-            new Typed('#typed-text', {
-                strings: [' Sejam bem vindos ao meu currículo e portfolio web.'],
-                typeSpeed: 30,
-                backSpeed: 40,
-                startDelay: 300,
-                showCursor: true,
-                cursorChar: '|',
-                loop: false,
-                contentType: 'html',
-                onBegin: (self) => self.el.innerHTML = '',
-                preStringTyped: (pos, self) => self.el.innerHTML = ''
-            });
-        } catch (e) {
-            console.error('Erro no Typed.js (header index):', e);
-            document.querySelector('#typed-text').innerHTML = 
-                ' print("Hello World") <br> Sejam bem vindos ao meu currículo e portfolio web.';
-        }
+
+    if (document.querySelector('#typed-text') && window.typedTexts) {
+        initTyped('#typed-text', window.typedTexts, 'typed-text', { typeSpeed: 30, backSpeed: 40 });
+    }
+
+    if (document.querySelector('#typed-portfolio-header') && window.typedPortfolioTexts) {
+        initTyped('#typed-portfolio-header', window.typedPortfolioTexts, 'typed-portfolio-header', { typeSpeed: 20, backSpeed: 30 });
     }
 
     // Configuração do Menu
@@ -67,15 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!menuOpen) {
                 overlay.classList.add('active');
-
-                const onTransitionEnd = () => {
+                const onOverlayTransitionEnd = () => {
                     sidebar.classList.add('open');
-                    overlay.removeEventListener('transitionend', onTransitionEnd);
+                    overlay.removeEventListener('transitionend', onOverlayTransitionEnd);
                     menuOpen = true;
                     isTransitioning = false;
                 };
+                overlay.addEventListener('transitionend', onOverlayTransitionEnd);
 
-                overlay.addEventListener('transitionend', onTransitionEnd);
             } else {
                 sidebar.classList.remove('open');
                 setTimeout(() => {
@@ -91,46 +98,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('#sidebar a').forEach(link => {
             link.addEventListener('click', () => {
-                if (menuOpen) toggleMenu();
+                if (menuOpen) {
+                    toggleMenu();
+                }
             });
         });
     }
     setupMenu();
-    
-    // Configuração do Carrossel
+
+    // MODAL DE IMAGEM EXPANDIDA
+    const imageModalOverlay = document.getElementById('image-modal-overlay');
+    const expandedImage = document.getElementById('expanded-image-src');
+    const modalCaption = document.getElementById('image-modal-caption');
+    const closeModalButton = document.querySelector('.image-modal-close');
+
+    function openImageModal(src, caption) {
+        if (!imageModalOverlay || !expandedImage || !modalCaption) return;
+        expandedImage.src = src;
+        modalCaption.innerHTML = caption;
+        imageModalOverlay.classList.add('visible');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeImageModal() {
+        if (!imageModalOverlay) return;
+        imageModalOverlay.classList.remove('visible');
+        document.body.classList.remove('modal-open');
+    }
+
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', closeImageModal);
+    }
+    if (imageModalOverlay) {
+        imageModalOverlay.addEventListener('click', (event) => {
+            if (event.target === imageModalOverlay) {
+                closeImageModal();
+            }
+        });
+    }
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && imageModalOverlay && imageModalOverlay.classList.contains('visible')) {
+            closeImageModal();
+        }
+    });
+
     function setupCarousel() {
-        const items = document.querySelectorAll('.carousel-item');
-        const dots = document.querySelectorAll('.dot');
-        const infoText = document.getElementById('carousel-info-text');
+        const carousel = document.querySelector('.carousel');
+        if (!carousel) return;
+
+        const items = carousel.querySelectorAll('.carousel-item');
+        const dotsContainer = document.querySelector('.carousel-dots');
+        const infoTextElement = document.getElementById('carousel-info-text-display');
         const prevBtn = document.querySelector('.carousel-arrow.prev');
         const nextBtn = document.querySelector('.carousel-arrow.next');
-        
-        if (!items.length || !dots.length) return;
 
+        if (!items.length || !dotsContainer || !infoTextElement) return;
+
+        const dots = dotsContainer.querySelectorAll('.dot');
         let currentIndex = 0;
-        const infoTexts = [
-            'Página de administração do sistema de agendamento de consultas.<br>Botão para logout do admin, botão para exportar agendamentos já configurado para tabela em .xlsx, campo de busca por nome, data, e botões para excluir agendamentos.',
-            'Página inicial, para o usuário realizar o agendamento da sua consulta. O campo de horário atualiza conforme os horarios disponiveis no dia selecionado.',
-            'Página de sugestões do sistema de filmes. A página usa uma API de filmes que busca algumas informações para ajudar o usuário a escolher um filme para indicar.',
-            'Página de administração do sistema de filmes. Mostra todas as indicações de gênero e filme com a possibilidade de excluir caso tenha indicações erradas, assim como opções para sortear, definir quantidade de pessoas e resetar todo o sistema.',
-            'Página de indicações e resultados. Possui botão para indicar gênero ou filme, assim como mostra os resultados dos sorteios.'
-        ];
+        const imageInfos = window.galleryImageInfos || [];
 
         function showSlide(index) {
             if (index >= items.length) index = 0;
             if (index < 0) index = items.length - 1;
-            
+
             items.forEach(item => {
                 item.style.opacity = '0';
                 item.classList.remove('active');
             });
             dots.forEach(dot => dot.classList.remove('active'));
-            
+
             items[index].style.opacity = '1';
             items[index].classList.add('active');
-            dots[index].classList.add('active');
-            infoText.textContent = infoTexts[index];
-            
+            if (dots[index]) dots[index].classList.add('active');
+
+            if (imageInfos[index] !== undefined) {
+                infoTextElement.innerHTML = imageInfos[index];
+            } else {
+                const currentItemInfo = items[index] ? items[index].dataset.info : 'Informações não disponíveis.';
+                infoTextElement.innerHTML = currentItemInfo.replace(/\r\n|\n|\r/g, '<br>');
+            }
+
             currentIndex = index;
         }
 
@@ -141,25 +189,67 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nextBtn) nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
         if (prevBtn) prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') showSlide(currentIndex + 1);
-            if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
+        items.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                const imgSrc = item.src;
+
+                const imgInfo = (imageInfos[index] !== undefined)
+                    ? imageInfos[index]
+                    : (item.dataset.info || 'Informação não disponível.');
+
+                openImageModal(imgSrc, imgInfo.replace(/\r\n|\n|\r/g, '<br>'));
+            });
         });
 
-        showSlide(0);
+
+        document.addEventListener('keydown', (e) => {
+            const galeriaSection = document.getElementById('portfolio-galeria');
+            // Não interfere se o modal de imagem estiver aberto
+            if (imageModalOverlay && imageModalOverlay.classList.contains('visible')) return;
+
+            if (galeriaSection && window.getComputedStyle(galeriaSection).display !== 'none') {
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    showSlide(currentIndex + 1);
+                }
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    showSlide(currentIndex - 1);
+                }
+            }
+        });
+
+        if (items.length > 0) {
+            showSlide(0);
+        }
     }
     setupCarousel();
 
-    // Função auxiliar para os efeitos de digitação
-    function setupSectionObserver(sectionId, typedElementId, strings, options = {}) {
+    function setupSectionObserver(sectionId, typedElementId, options = {}) {
         const section = document.querySelector(sectionId);
         const typedElement = document.querySelector(typedElementId);
-        
+
         if (!section || !typedElement) return;
 
-        // Fallback se Typed.js não estiver disponível
+        let textSource = null;
+        if (window.typedTexts && window.typedTexts[typedElementId] !== undefined) {
+            textSource = window.typedTexts;
+        } else if (window.typedPortfolioTexts && window.typedPortfolioTexts[typedElementId] !== undefined) {
+            textSource = window.typedPortfolioTexts;
+        }
+
+        let stringsToType = textSource ? (Array.isArray(textSource[typedElementId]) ? textSource[typedElementId] : [textSource[typedElementId]]) : null;
+
+        if (!stringsToType && typedElement.dataset.text) {
+            stringsToType = [typedElement.dataset.text];
+        }
+
+        if (!stringsToType || stringsToType.length === 0 || stringsToType[0].trim() === "") {
+            return;
+        }
+
         if (typeof Typed === 'undefined') {
-            typedElement.innerHTML = Array.isArray(strings) ? strings[0] : strings;
+            typedElement.innerHTML = stringsToType.join('<br>');
             return;
         }
 
@@ -167,120 +257,83 @@ document.addEventListener('DOMContentLoaded', () => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     try {
-                        // Destrói instância anterior se existir
                         if (typedElement._typed) {
                             typedElement._typed.destroy();
                         }
-                        
+
+                        let finalContentType = options.contentType || 'html';
+                        if (typedElementId === 'typed-competencias') {
+                            finalContentType = 'html';
+                        }
+
                         typedElement._typed = new Typed(typedElement, {
-                            strings: Array.isArray(strings) ? strings : [strings],
+                            strings: stringsToType,
                             typeSpeed: options.typeSpeed || 5,
                             backSpeed: options.backSpeed || 10,
-                            startDelay: 300,
+                            startDelay: options.startDelay || 300,
                             showCursor: options.showCursor !== false,
                             cursorChar: '|',
                             loop: false,
-                            contentType: 'html',
+                            contentType: finalContentType,
                             onBegin: (self) => self.el.innerHTML = '',
                             preStringTyped: (pos, self) => self.el.innerHTML = '',
                             ...options
                         });
                     } catch (e) {
                         console.error(`Erro no Typed.js (${typedElementId}):`, e);
-                        typedElement.innerHTML = Array.isArray(strings) ? strings[0] : strings;
+                        typedElement.innerHTML = stringsToType.join('<br>');
                     }
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: options.threshold || 0.5 });
 
         observer.observe(section);
     }
 
-    // Seções com efeito de digitação
-    setupSectionObserver('#sobre', '#typed-sobre', [
-        'Atualmente tenho 27 anos, resido em Nilópolis/RJ, estou no ultimo período do curso de engenharia da computação e estou\n\n' +
-        'buscando experiências novas no setor de T.I. Procuro vagas como Trainee ou analista, em áreas como desenvolvimento de sistemas,\n' +
-        'analise de dados, gestão de projetos, governança de T.I.'
-    ]);
+    // index.html
+    setupSectionObserver('#sobre', '#typed-sobre');
+    setupSectionObserver('#competencias', '#typed-competencias', { showCursor: false });
+    setupSectionObserver('#experiencias', '#typed-experiencias');
+    setupSectionObserver('#experiencias2', '#typed-experiencias2');
+    setupSectionObserver('#educacao', '#typed-educacao');
 
-    setupSectionObserver('#competencias', '#typed-competencias', [`
-        <div class="competencias-grid">
-            <div>• Pacote Office<br>• Pacote Adobe<br>• Inglês<br>• Scrum<br>• COBIT<br>• ITIL</div>
-            <div>• HTML<br>• CSS<br>• Plone<br>• Drupal<br>• Gestão de projetos<br>• Python</div>
-            <div>• Power BI<br>• Benner<br>• JIRA<br>• Lógica<br>• Resolução de problemas<br>• Organização</div>
-            <div>• Comunicação<br>• Trabalho em equipe<br>• Planejamento<br>• Resiliência<br>• Atendimento ao cliente</div>
-        </div>
-    `], { showCursor: false });
+    // portfolio.html
+    setupSectionObserver('#portfolio-sobre', '#typed-portsobre');
+    setupSectionObserver('#portfolio-sobre2', '#typed-portsobre2');
 
-    setupSectionObserver('#experiencias', '#typed-experiencias', [
-        'Possuo experiências de trabalho com atendimento ao cliente, '+
-        'trabalho em equipe, cumprimento de prazos e até mesmo liderança.'+
-        'Também trabalhos como freelancer de design gráfico e suporte de T.I (remoto e presencial), tanto no hardware como software.'+
-        '<br>Abaixo minhas experiências:'+
-        '<br><br>Nuclep (02/2025 - Atual)<br>Estagiário em Assistência de transformação digital.<br>Manutenção de softwares internos, desenvolvimento de site em drupal e plone além de suporte ao usuário.' +
-        ' Testes de software, apoio a equipe e desenvolvimento de sistemas web em python, js, flask, html e css.<br><br>'+
-        'Nuclep (2023 - 2024)<br>Estagiário em Governança de T.I.<br>Elaboração de documentos, estudos para contratação, apoio na gestão de projetos (COBIT, ITIL e metodologias ágeis).'
-    ]);
-
-    setupSectionObserver('#experiencias2', '#typed-experiencias2', [
-        'Autônomo (2020 - Atual)<br>Suporte técnico para computadores<br>Montagem e manutenção de computadores, limpeza, formação e consultoria.<br><br>'+
-        'Autônomo (2021 - 2023)<br>Freelancer Design Gráfico.<br>Logotipo e identidade de marca, posts personalizados de redes sociais e divulgações de eventos como flyers.<br><br>'+
-        'ESPRO (Ensino Social Profissionalizante) (2018 - 2019)<br>Jovem Aprendiz<br>Atendimento ao cliente e trabalho em equipe.'
-    ]);
-
-    setupSectionObserver('#educacao', '#typed-educacao', [
-        'Minha formação educacional:<br><br>' +
-        'Bacharel em Engenharia da Computação<br>Universidade Cândido Mendes (07/2021 - 07/2025).<br><br>' +
-        'Cursos complementares:<br>• Microsoft Security, Compliance, and Identity Fundamentals, Tecnologia da Informação (Microsoft).<br>'+
-        '• Fundamentos da Lei Geral de Proteção de Dados (Enap).<br>• Uso do Lean e Inception na Administração Pública (Enap).<br>'+
-        '• Scrum no Contexto do Serviço Público (Enap).<br>• Jira e Confluence (Canal Valor).<br>• Curso Design Gráfico Completo 10 Cursos do Zero ao Avançado (Udemy).'+
-        '<br><br>Clique no menu lateral para acessar meu portfólio ou entrar em contato.'
-    ]);
-
-    // Seções do portfolio.html
-    setupSectionObserver('#portfolio-sobre', '#typed-portsobre', [
-        'Aqui estão alguns dos projetos que desenvolvi com dedicação e criatividade. Eles representam minha jornada, aprendizado e habilidades práticas em design, desenvolvimento de scripts em IA e desenvolvimento web, incluindo:<br><br>' +
-        '• Aplicações Flask com banco de dados e APIs externas.<br>' +
-        '• Sistemas de marcação com controle administrativo.<br>' +
-        '• Layouts modernos, responsivos e acessíveis.'+
-        '<br><br>Também já trabalhei em projetos internos de T.I na equipe de gestão de projetos, atualizando catalogo de serviços, estruturando projetos e auxiliando na elaboração do planejamento estratégico do setor.'
-    ]);
-
-    setupSectionObserver('#portfolio-sobre2', '#typed-portsobre2', [
-        'Nos projetos você vai encontrar:<br><br>'+
-        '• O site atual, feito para ser o meu curriculo web.<br>'+
-        '• Um projeto de desenvolvimento do site institucional da empresa que fui estágiario, desenvolvido em drupal e seguindo as normas vigentes. Esse projeto me ensinou muito sobre trabalho em equipe e atenção aos detalhes.'+
-        '<br>  (Uma observação importante é que eu também participei do desenvolvimento do antigo site em drupal, porém o site não existe mais.)'+
-        '<br>• Um projeto de indicação de gêneros, títulos de filmes e sorteio utilizando a API do TMDB para uma página de sugestões.'+
-        '<br>• Um projeto de agendamento de consultas que utiliza um banco de dados local com uma pagina adm para controle que inclui exclusão das consultas, login e filtro.'+
-        '<br><br>Gostarei muito de explicar com mais detalhes via e-mail, reunião ou qualquer outro meio de contato pessoal que estão presentes no menu lateral, aguardo seu contato.'
-    ]);
-
-    // Scroll snapping
     function setupScrollSnapping() {
         let isScrolling = false;
         const scrollDelay = 800;
 
         document.addEventListener('wheel', (e) => {
-            if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
+            if (document.getElementById('sidebar')?.classList.contains('open') ||
+                (imageModalOverlay && imageModalOverlay.classList.contains('visible')) ||
+                isScrolling) return;
 
-            isScrolling = true;
+
             const delta = Math.sign(e.deltaY);
             const currentScroll = window.scrollY;
             const windowHeight = window.innerHeight;
-
             let targetScroll;
+
             if (delta > 0) {
                 targetScroll = Math.floor(currentScroll / windowHeight) * windowHeight + windowHeight;
             } else {
                 targetScroll = Math.max(0, Math.ceil(currentScroll / windowHeight) * windowHeight - windowHeight);
             }
 
-            window.scrollTo({
-                top: targetScroll,
-                behavior: 'smooth'
-            });
+            const maxScroll = document.documentElement.scrollHeight - windowHeight;
+            targetScroll = Math.min(targetScroll, maxScroll);
+
+            if (Math.abs(currentScroll - targetScroll) > 1) {
+                e.preventDefault();
+                isScrolling = true;
+                window.scrollTo({
+                    top: targetScroll,
+                    behavior: 'smooth'
+                });
+            }
 
             setTimeout(() => {
                 isScrolling = false;
@@ -288,22 +341,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
 
         document.addEventListener('keydown', (e) => {
-            if (document.getElementById('sidebar')?.classList.contains('open') || isScrolling) return;
+            if (document.getElementById('sidebar')?.classList.contains('open') ||
+                (imageModalOverlay && imageModalOverlay.classList.contains('visible')) ||
+                isScrolling) return;
 
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                e.preventDefault();
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'PageDown' || e.key === 'PageUp' || e.key === 'Home' || e.key === 'End') {
+
+                let preventDefault = true;
+                if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
+                    preventDefault = false;
+                }
+                if (preventDefault) e.preventDefault(); else return;
+
                 isScrolling = true;
 
-                const delta = e.key === 'ArrowDown' ? 1 : -1;
                 const currentScroll = window.scrollY;
                 const windowHeight = window.innerHeight;
-
                 let targetScroll;
-                if (delta > 0) {
+
+                if (e.key === 'ArrowDown' || e.key === 'PageDown') {
                     targetScroll = Math.floor(currentScroll / windowHeight) * windowHeight + windowHeight;
-                } else {
+                } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
                     targetScroll = Math.max(0, Math.ceil(currentScroll / windowHeight) * windowHeight - windowHeight);
+                } else if (e.key === 'Home') {
+                    targetScroll = 0;
+                } else if (e.key === 'End') {
+                    targetScroll = document.documentElement.scrollHeight - windowHeight;
                 }
+
+                const maxScroll = document.documentElement.scrollHeight - windowHeight;
+                targetScroll = Math.min(targetScroll, maxScroll);
+                targetScroll = Math.max(0, targetScroll);
+
 
                 window.scrollTo({
                     top: targetScroll,
@@ -318,88 +387,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setupScrollSnapping();
 
-    // Âncoras suaves
     function setupSmoothAnchors() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+            anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar?.classList.contains('open')) {
-                    document.getElementById('menu-toggle').classList.remove('active');
-                    document.getElementById('menu-overlay').classList.remove('active');
-                    sidebar.classList.remove('open');
+                if (targetId === '#') {
+                    e.preventDefault();
+                    return;
                 }
 
                 const targetElement = document.querySelector(targetId);
+
                 if (targetElement) {
-                    let isScrolling = true;
+                    e.preventDefault();
+
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar?.classList.contains('open')) {
+                        const menuToggle = document.getElementById('menu-toggle');
+                        const overlay = document.getElementById('menu-overlay');
+                        if (menuToggle) menuToggle.classList.remove('active');
+                        if (overlay) overlay.classList.remove('active');
+                        sidebar.classList.remove('open');
+                    }
+
                     targetElement.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
-
-                    setTimeout(() => {
-                        isScrolling = false;
-                    }, 800);
                 }
             });
         });
     }
     setupSmoothAnchors();
 });
-
-// Funções do Modal
-function openModal(index) {
-    const images = [
-        "{{ url_for('static', filename='img/agen-consu-adm.png') }}",
-        "{{ url_for('static', filename='img/agen-consu-home.png') }}",
-        "{{ url_for('static', filename='img/port-1.png') }}",
-        "{{ url_for('static', filename='img/port-home-film.png') }}",
-        "{{ url_for('static', filename='img/port-sort-film.png') }}",
-        "{{ url_for('static', filename='img/port-sugestoes-film.png') }}",
-        "{{ url_for('static', filename='img/port-admin-filmes.png') }}",
-    ];
-    
-    currentImageIndex = index;
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-image');
-    
-    modal.style.display = 'flex';
-    modalImg.src = images[currentImageIndex];
-    
-    setTimeout(() => {
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-    }, 10);
-}
-
-function closeModal() {
-    document.getElementById('image-modal').style.display = 'none';
-}
-
-function navigateImage(direction) {
-    const images = [
-        "{{ url_for('static', filename='img/agen-consu-adm.png') }}",
-        "{{ url_for('static', filename='img/agen-consu-home.png') }}",
-        "{{ url_for('static', filename='img/port-1.png') }}",
-        "{{ url_for('static', filename='img/port-home-film.png') }}",
-        "{{ url_for('static', filename='img/port-sort-film.png') }}",
-        "{{ url_for('static', filename='img/port-sugestoes-film.png') }}",
-        "{{ url_for('static', filename='img/port-admin-filmes.png') }}",
-    ];
-    
-    currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
-    document.getElementById('modal-image').src = images[currentImageIndex];
-}
-
-window.addEventListener('resize', function() {
-    if (document.getElementById('image-modal')?.style.display === 'flex') {
-        const modal = document.getElementById('image-modal');
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-    }
-});
-
