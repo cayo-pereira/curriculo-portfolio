@@ -1,7 +1,7 @@
 import os
 import json
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -302,6 +302,64 @@ def admin_update_password():
         flash('Senha atual incorreta.', 'danger')
 
     return redirect(url_for('admin_dashboard'))
+
+# --- NOVAS ROTAS PARA GERENCIAMENTO DA GALERIA ---
+
+@app.route('/admin/update_image_order', methods=['POST'])
+def admin_update_image_order():
+    """ Rota para atualizar a ordem das imagens da galeria. """
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'error': 'Unauthorized'}), 401
+    
+    new_order_filenames = request.json.get('order')
+    if not new_order_filenames:
+        return jsonify({'success': False, 'error': 'Missing order data'}), 400
+    
+    data = load_data()
+    gallery_images = data.get('portfolio_content', {}).get('gallery_images', [])
+    
+    # Cria um mapa das imagens existentes para fácil acesso
+    image_map = {img['filename']: img for img in gallery_images}
+    
+    # Cria a nova lista de imagens na ordem recebida
+    reordered_gallery = [image_map[filename] for filename in new_order_filenames if filename in image_map]
+    
+    # Garante que nenhuma imagem foi perdida no processo
+    if len(reordered_gallery) == len(gallery_images):
+        data['portfolio_content']['gallery_images'] = reordered_gallery
+        save_data(data)
+        return jsonify({'success': True, 'message': 'Ordem das imagens atualizada com sucesso.'})
+    else:
+        return jsonify({'success': False, 'error': 'Inconsistência nos dados das imagens.'}), 500
+
+@app.route('/admin/update_image_info', methods=['POST'])
+def admin_update_image_info():
+    """ Rota para atualizar a descrição (info) de uma imagem específica. """
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'error': 'Unauthorized'}), 401
+    
+    req_data = request.json
+    filename = req_data.get('filename')
+    new_info = req_data.get('info')
+
+    if not filename or new_info is None:
+        return jsonify({'success': False, 'error': 'Dados incompletos fornecidos.'}), 400
+
+    data = load_data()
+    gallery_images = data.get('portfolio_content', {}).get('gallery_images', [])
+    
+    image_found = False
+    for image in gallery_images:
+        if image['filename'] == filename:
+            image['info'] = new_info
+            image_found = True
+            break
+    
+    if image_found:
+        save_data(data)
+        return jsonify({'success': True, 'message': 'Descrição da imagem atualizada com sucesso.'})
+    else:
+        return jsonify({'success': False, 'error': 'Imagem não encontrada.'}), 404
 
 
 if __name__ == '__main__':

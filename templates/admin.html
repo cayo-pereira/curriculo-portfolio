@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Administração</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
         body {
             background-color: #181818;
@@ -119,6 +120,15 @@
             border-color: #00ff7f;
             box-shadow: 0 0 0 2px rgba(0,255,127,0.2);
         }
+        .btn {
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 5px;
+        }
         .btn-submit {
             background-color: #00ff7f;
             color: #1a1a1a;
@@ -136,19 +146,27 @@
         .btn-remove {
             background-color: #ff4d4d;
             color: white;
-            border: none;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
         .btn-remove:hover {
             background-color: #cc0000;
         }
+        .btn-edit {
+            background-color: #4da6ff;
+            color: white;
+        }
+        .btn-edit:hover {
+            background-color: #007bff;
+        }
+
 
         .gallery-management {
             margin-top: 20px;
+        }
+        #sortable-gallery .gallery-item {
+            cursor: grab;
+        }
+        #sortable-gallery .gallery-item:active {
+            cursor: grabbing;
         }
         .gallery-item {
             display: flex;
@@ -174,11 +192,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-right: 10px;
         }
          .gallery-item-info small {
             display: block;
             color: #888;
             font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .gallery-item-actions {
+            display: flex;
+            align-items: center;
         }
 
         .flash-messages { margin-bottom: 20px; list-style: none; padding: 0; }
@@ -188,6 +214,58 @@
         .flash-messages .info { background-color: rgba(77,166,255,0.2); border: 1px solid #4da6ff; color: #4da6ff; }
         .flash-messages .warning { background-color: rgba(255,165,0,0.2); border: 1px solid #ffa500; color: #ffa500; }
 
+        /* Estilos para o Modal de Edição */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background-color: #2a2a2a;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            color: #00ff7f;
+            font-size: 1.4rem;
+        }
+        .modal-content textarea {
+            width: 100%;
+            min-height: 150px;
+            margin-top: 15px;
+            background-color: #333;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            padding: 10px;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .modal-actions button {
+            padding: 10px 18px;
+            font-weight: bold;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+        }
     </style>
 </head>
 <body>
@@ -208,7 +286,7 @@
         {% endwith %}
 
         <form method="POST" action="{{ url_for('admin_update_texts') }}">
-            <details class="section-admin" open>
+            <details class="section-admin">
                 <summary>Conteúdo da Página Principal (Currículo)</summary>
                 <div class="form-fields">
                     <div class="form-group">
@@ -306,22 +384,27 @@
 
             <div class="gallery-management">
                 <h3>Imagens Atuais:</h3>
-                {% if data.gallery_images_admin %}
-                    {% for image in data.gallery_images_admin %}
-                    <div class="gallery-item">
-                        <img src="{{ image.src }}" alt="Preview de {{ image.filename }}">
-                        <div class="gallery-item-info">
-                            {{ image.filename }}
-                            <small title="{{ image.info }}">Info: {{ image.info | truncate(50, True) }}</small>
+                <div id="sortable-gallery">
+                    {% if data.gallery_images_admin %}
+                        {% for image in data.gallery_images_admin %}
+                        <div class="gallery-item" data-filename="{{ image.filename }}">
+                            <img src="{{ image.src }}" alt="Preview de {{ image.filename }}">
+                            <div class="gallery-item-info">
+                                {{ image.filename }}
+                                <small title="{{ image.info }}" id="info-{{ image.filename }}">{{ image.info | truncate(50, True) }}</small>
+                            </div>
+                            <div class="gallery-item-actions">
+                                <button type="button" class="btn btn-edit" data-filename="{{ image.filename }}" data-info="{{ image.info }}">Editar</button>
+                                <form method="POST" action="{{ url_for('admin_remove_image', filename_to_remove=image.filename) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-remove" onclick="return confirm('Tem certeza que deseja remover esta imagem? Esta ação não pode ser desfeita.');">Remover</button>
+                                </form>
+                            </div>
                         </div>
-                        <form method="POST" action="{{ url_for('admin_remove_image', filename_to_remove=image.filename) }}" style="display: inline;">
-                            <button type="submit" class="btn-remove" onclick="return confirm('Tem certeza que deseja remover esta imagem? Esta ação não pode ser desfeita.');">Remover</button>
-                        </form>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p>Nenhuma imagem na galeria.</p>
-                {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p>Nenhuma imagem na galeria.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
         
@@ -343,7 +426,137 @@
                 <button type="submit" class="btn-submit">Atualizar Senha</button>
             </form>
         </div>
-
     </div>
+
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Editar Descrição da Imagem</h2>
+            <p style="color: #ccc; font-size: 0.9em;">Você está editando a imagem: <strong id="editing-filename"></strong></p>
+            <form id="edit-form">
+                <input type="hidden" id="edit-modal-filename">
+                <div class="form-group">
+                    <label for="edit-modal-textarea">Descrição:</label>
+                    <textarea id="edit-modal-textarea" name="info" rows="6" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="edit-modal-cancel" class="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn-submit">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ---- LÓGICA PARA REORDENAR IMAGENS ---- //
+    const sortableGallery = document.getElementById('sortable-gallery');
+    if (sortableGallery) {
+        new Sortable(sortableGallery, {
+            animation: 150,
+            ghostClass: 'blue-background-class',
+            onEnd: function (evt) {
+                const items = sortableGallery.querySelectorAll('.gallery-item');
+                const newOrder = Array.from(items).map(item => item.dataset.filename);
+                
+                fetch("{{ url_for('admin_update_image_order') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ order: newOrder }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Opcional: mostrar uma notificação de sucesso.
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Opcional: mostrar uma notificação de erro.
+                });
+            }
+        });
+    }
+
+    // ---- LÓGICA PARA EDITAR DESCRIÇÃO DA IMAGEM ---- //
+    const modal = document.getElementById('edit-modal');
+    const modalFilenameInput = document.getElementById('edit-modal-filename');
+    const modalTextarea = document.getElementById('edit-modal-textarea');
+    const editingFilenameDisplay = document.getElementById('editing-filename');
+    const editForm = document.getElementById('edit-form');
+    const cancelBtn = document.getElementById('edit-modal-cancel');
+
+    // Função para abrir o modal
+    function openEditModal(filename, currentInfo) {
+        modalFilenameInput.value = filename;
+        modalTextarea.value = currentInfo;
+        editingFilenameDisplay.textContent = filename;
+        modal.style.display = 'flex';
+    }
+
+    // Função para fechar o modal
+    function closeEditModal() {
+        modal.style.display = 'none';
+    }
+
+    // Adiciona o evento de clique para todos os botões de "Editar"
+    sortableGallery.addEventListener('click', function(e) {
+        if (e.target && e.target.matches('.btn-edit')) {
+            const filename = e.target.dataset.filename;
+            const info = e.target.dataset.info;
+            openEditModal(filename, info);
+        }
+    });
+
+    // Evento para fechar o modal ao clicar no botão "Cancelar"
+    cancelBtn.addEventListener('click', closeEditModal);
+
+    // Evento para fechar o modal ao clicar fora dele
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeEditModal();
+        }
+    });
+
+    // Evento para salvar as alterações do formulário
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const filename = modalFilenameInput.value;
+        const newInfo = modalTextarea.value;
+
+        fetch("{{ url_for('admin_update_image_info') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ filename: filename, info: newInfo }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Atualiza a informação na página sem recarregar
+                const infoElement = document.getElementById(`info-${filename}`);
+                const editButton = document.querySelector(`.btn-edit[data-filename="${filename}"]`);
+                if (infoElement) {
+                    infoElement.textContent = newInfo.length > 50 ? newInfo.substring(0, 50) + '...' : newInfo;
+                    infoElement.title = newInfo;
+                }
+                if (editButton) {
+                    editButton.dataset.info = newInfo;
+                }
+                closeEditModal();
+                // Opcional: Mostrar uma mensagem de sucesso.
+            } else {
+                alert('Erro ao atualizar: ' + (data.message || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Fetch Error:', error);
+            alert('Ocorreu um erro de comunicação com o servidor.');
+        });
+    });
+});
+</script>
+
 </body>
 </html>
